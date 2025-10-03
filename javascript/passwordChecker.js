@@ -8,9 +8,12 @@ function checkPasswordStrength(password) {
 
   switch (strength) {
     case 0:
-    case 1: return 'Weak';
+    case 1:
+      return "Weak";
     case 2:
-    case 3: return 'Medium';
-    case 4: return 'Strong';
+    case 3:
+      return "Medium";
+    case 4:
+      return "Strong";
   }
 }

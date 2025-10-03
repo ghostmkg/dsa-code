@@ -1,116 +1,116 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Task Manager</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #f4f4f4;
-      display: flex;
-      justify-content: center;
-      padding: 2rem;
-    }
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Task Manager</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background: #f4f4f4;
+        display: flex;
+        justify-content: center;
+        padding: 2rem;
+      }
 
-    .task-manager {
-      background: white;
-      padding: 2rem;
-      border-radius: 10px;
-      width: 400px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    }
+      .task-manager {
+        background: white;
+        padding: 2rem;
+        border-radius: 10px;
+        width: 400px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      }
 
-    h2 {
-      text-align: center;
-      margin-bottom: 1rem;
-    }
+      h2 {
+        text-align: center;
+        margin-bottom: 1rem;
+      }
 
-    input {
-      width: 70%;
-      padding: 0.5rem;
-      font-size: 1rem;
-    }
+      input {
+        width: 70%;
+        padding: 0.5rem;
+        font-size: 1rem;
+      }
 
-    button {
-      padding: 0.5rem;
-      margin-left: 0.5rem;
-      font-size: 1rem;
-      cursor: pointer;
-    }
+      button {
+        padding: 0.5rem;
+        margin-left: 0.5rem;
+        font-size: 1rem;
+        cursor: pointer;
+      }
 
-    ul {
-      list-style: none;
-      padding: 0;
-      margin-top: 1rem;
-    }
+      ul {
+        list-style: none;
+        padding: 0;
+        margin-top: 1rem;
+      }
 
-    li {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 0.5rem;
-      border-bottom: 1px solid #ddd;
-    }
+      li {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.5rem;
+        border-bottom: 1px solid #ddd;
+      }
 
-    .completed {
-      text-decoration: line-through;
-      color: gray;
-    }
+      .completed {
+        text-decoration: line-through;
+        color: gray;
+      }
 
-    .footer {
-      text-align: center;
-      margin-top: 1rem;
-      font-size: 0.8rem;
-      color: #666;
-    }
-  </style>
-</head>
-<body>
-  <div class="task-manager">
-    <h2>🗂️ Task Manager</h2>
-    <input type="text" id="task-input" placeholder="Enter a task..." />
-    <button onclick="addTask()">Add</button>
-    <ul id="task-list"></ul>
-    <p class="footer">Built with HTML, CSS & JS</p>
-  </div>
+      .footer {
+        text-align: center;
+        margin-top: 1rem;
+        font-size: 0.8rem;
+        color: #666;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="task-manager">
+      <h2>🗂️ Task Manager</h2>
+      <input type="text" id="task-input" placeholder="Enter a task..." />
+      <button onclick="addTask()">Add</button>
+      <ul id="task-list"></ul>
+      <p class="footer">Built with HTML, CSS & JS</p>
+    </div>
 
-  <script>
-    const input = document.getElementById('task-input');
-    const taskList = document.getElementById('task-list');
-    let tasks = [];
+    <script>
+      const input = document.getElementById("task-input");
+      const taskList = document.getElementById("task-list");
+      let tasks = [];
 
-    function renderTasks() {
-      taskList.innerHTML = '';
-      tasks.forEach((task, index) => {
-        const li = document.createElement('li');
-        li.className = task.completed ? 'completed' : '';
-        li.innerHTML = `
+      function renderTasks() {
+        taskList.innerHTML = "";
+        tasks.forEach((task, index) => {
+          const li = document.createElement("li");
+          li.className = task.completed ? "completed" : "";
+          li.innerHTML = `
           <span onclick="toggleTask(${index})">${task.text}</span>
           <button onclick="deleteTask(${index})">❌</button>
         `;
-        taskList.appendChild(li);
-      });
-    }
+          taskList.appendChild(li);
+        });
+      }
 
-    function addTask() {
-      const text = input.value.trim();
-      if (text) {
-        tasks.push({ text, completed: false });
-        input.value = '';
+      function addTask() {
+        const text = input.value.trim();
+        if (text) {
+          tasks.push({ text, completed: false });
+          input.value = "";
+          renderTasks();
+        }
+      }
+
+      function toggleTask(index) {
+        tasks[index].completed = !tasks[index].completed;
         renderTasks();
       }
-    }
 
-    function toggleTask(index) {
-      tasks[index].completed = !tasks[index].completed;
-      renderTasks();
-    }
-
-    function deleteTask(index) {
-      tasks.splice(index, 1);
-      renderTasks();
-    }
-  </script>
-</body>
+      function deleteTask(index) {
+        tasks.splice(index, 1);
+        renderTasks();
+      }
+    </script>
+  </body>
 </html>

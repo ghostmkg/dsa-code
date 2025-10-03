@@ -28,8 +28,10 @@ var isPerfectSquare = function (num) {
     let mid = Math.floor((low + high) / 2);
     let sq = mid * mid;
 
-    if (sq === num) return true; // found exact square
-    else if (sq > num) high = mid - 1; // mid^2 too large → search left
+    if (sq === num)
+      return true; // found exact square
+    else if (sq > num)
+      high = mid - 1; // mid^2 too large → search left
     else low = mid + 1; // mid^2 too small → search right
   }
 
