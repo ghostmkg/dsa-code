@@ -1,0 +1,208 @@
+#include <iostream>
+#include <queue>
+
+using namespace std;
+
+
+class node
+{
+    public:
+    
+    int data;
+    node* leftChild;
+    node* rightChild;
+    
+    node()
+    {
+        
+    }
+    
+    
+    node(int d)
+    {
+        data = d;
+        leftChild = NULL;
+        rightChild = NULL;
+    }
+    
+};
+
+
+void bfs_print(node* root)
+{
+    queue<node*> q;
+    q.push(root);
+    q.push(NULL);
+    
+    while(!q.empty())
+    {
+        node* temp = q.front();
+        
+        if(temp == NULL)
+        {
+            cout << endl;
+            q.pop();
+            
+            if(!q.empty())
+            {
+                q.push(NULL);
+            }
+        }
+        
+        else
+        {
+            cout << temp -> data << "  ";
+            q.pop();
+            
+            if(temp -> leftChild)
+            {
+                q.push(temp -> leftChild);
+            }
+            
+            if(temp -> rightChild)
+            {
+                q.push(temp -> rightChild);
+            }
+        }
+    }
+}
+
+void inorderPrint(node* root)
+{
+    if(root == NULL)
+    {
+        return;
+    }
+    
+    inorderPrint(root -> leftChild);
+    cout << root -> data << "  ";
+    inorderPrint(root -> rightChild);
+}
+
+
+node* insertInBST(node* root, int ye_vaali_value)
+{
+    if(root == NULL)
+    {
+        return new node(ye_vaali_value);
+    }
+    
+    if(ye_vaali_value <= root -> data)
+    {
+        root -> leftChild = insertInBST(root -> leftChild, ye_vaali_value);
+    }
+    
+    else
+    {
+        root -> rightChild = insertInBST(root -> rightChild, ye_vaali_value);
+    }
+    
+    return root;
+}
+
+
+
+node* buildBST()
+{
+    int val;
+    cin >> val;
+    
+    node* temp = NULL;
+    while(val != -1)
+    {
+        temp = insertInBST(temp,val);
+        
+        cin >> val;
+    }
+    
+    return temp;
+}
+
+
+class linkedListPair
+{
+    public:
+    
+    node* head;
+    node* tail;
+    
+};
+
+linkedListPair flattenBST(node* root)
+{
+    linkedListPair l;
+    // agar null ho gya toh return null 
+    if(root == NULL)
+    {
+        l.head = NULL;
+        l.tail = NULL;
+        return l;
+    }
+    
+    if(root -> leftChild == NULL && root -> rightChild == NULL)
+    {
+        l.head = root;
+        l.tail = root;
+        return l;
+    }
+
+    if(root -> leftChild != NULL && root -> rightChild == NULL)
+    {
+        linkedListPair leftLinkedList = flattenBST(root -> leftChild);
+
+        (leftLinkedList.tail) -> rightChild = root;
+
+        l.head = leftLinkedList.head;
+        l.tail = root;
+        return l;
+        
+    }
+
+    if(root -> leftChild == NULL && root -> rightChild != NULL)
+    {
+        linkedListPair RightLinkedList = flattenBST(root -> rightChild);
+
+        root -> rightChild = RightLinkedList.head;
+
+        l.head = root;
+        l.tail = RightLinkedList.tail;
+        return l;
+    }
+    
+    linkedListPair leftLinkedList = flattenBST(root -> leftChild);
+    linkedListPair RightLinkedList = flattenBST(root -> rightChild);
+    
+    (leftLinkedList.tail) -> rightChild = root;
+    root -> rightChild = RightLinkedList.head;
+
+    l.head = leftLinkedList.head;
+    l.tail = RightLinkedList.tail;
+    return l;
+    
+    
+}
+
+
+
+int main()
+{
+    node* head = buildBST();
+    
+    inorderPrint(head);
+    cout << endl << endl;
+    
+    bfs_print(head);
+    cout << endl << endl;
+    
+    linkedListPair myPair = flattenBST(head);
+    node* myNode = myPair.head;
+    
+    while(myNode!=NULL)
+    {
+        cout << myNode -> data << " --> ";
+        myNode = myNode -> rightChild;
+    }
+    
+    
+    return 0;
+}
