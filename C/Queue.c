@@ -1,92 +1,49 @@
+//circular queue implementation in C using array
 
 #include <stdio.h>
-#include <conio.h>
-#define Max 5
+#define MAX 100
 
-int que[Max];
-int f = -1;
-int r = -1;
+typedef struct Queue {
+    int arr[MAX];
+    int front, rear;
+} Queue;
 
-void insert();
-void delete();
-void display();
+void initQueue(Queue* q) { q->front = q->rear = -1; }
 
-void main() {
-    clrscr();
-    int ch;
-    do {
-        printf("\n 1. Insert \n 2. Delete \n 3. Display \n 4. Stop\n");
-        printf("\n Enter your choice : ");
-        scanf("%d", &ch);
+int isEmpty(Queue* q) { return q->front == -1; }
+int isFull(Queue* q) { return (q->rear + 1) % MAX == q->front; }
 
-        switch (ch) {
-            case 1: insert();
-                    break;
-            case 2: delete();
-                    break;
-            case 3: display();
-                    break;
-            case 4: printf("\n Bye Bye!!\n");
-                    break;
-            default: printf("\n Invalid Input!!\n");
-        }
-    } while (ch != 4);
-
-    getch();
+void enqueue(Queue* q, int val) {
+    if (isFull(q)) {
+        printf("Queue Overflow\n");
+        return;
+    }
+    if (isEmpty(q)) q->front = q->rear = 0;
+    else q->rear = (q->rear + 1) % MAX;
+    q->arr[q->rear] = val;
 }
 
-void insert() {
-    int val;
-    if ((f == 0 && r == Max - 1) || (r == f - 1)) {
-        printf("\n Queue is Full\n");
-    } else {
-        if (f == -1 && r == -1) {
-            f = 0;
-            r = 0;
-        } else if (r == Max - 1 && f != 0) {
-            r = 0;
-        } else {
-            r++;
-        }
-        printf("\n Enter an element: ");
-        scanf("%d", &val);
-        que[r] = val;
+int dequeue(Queue* q) {
+    if (isEmpty(q)) {
+        printf("Queue Underflow\n");
+        return -1;
     }
+    int val = q->arr[q->front];
+    if (q->front == q->rear) q->front = q->rear = -1;
+    else q->front = (q->front + 1) % MAX;
+    return val;
 }
 
-void delete() {
-    if (f == -1 && r == -1) {
-        printf("\n Queue is Empty\n");
-    } else {
-        printf("\n The Element deleted is %d", que[f]);
-        if (f == r) {
-            f = -1;
-            r = -1;
-        } else if (f == Max - 1) {
-            f = 0;
-        } else {
-            f++;
-        }
-    }
-}
+int main() {
+    Queue q;
+    initQueue(&q);
 
-void display() {
-    int i;
-    if (f == -1 && r == -1) {
-        printf("\n Queue is Empty\n");
-    } else {
-        printf("\n Queue elements are: ");
-        if (f <= r) {
-            for (i = f; i <= r; i++) {
-                printf("%d ", que[i]);
-            }
-        } else {
-            for (i = f; i < Max; i++) {
-                printf("%d ", que[i]);
-            }
-            for (i = 0; i <= r; i++) {
-                printf("%d ", que[i]);
-            }
-        }
-    }
+    enqueue(&q, 10);
+    enqueue(&q, 20);
+    enqueue(&q, 30);
+
+    printf("Dequeued: %d\n", dequeue(&q));
+    printf("Dequeued: %d\n", dequeue(&q));
+
+    return 0;
 }
