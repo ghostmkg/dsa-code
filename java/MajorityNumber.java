@@ -1,30 +1,31 @@
 import java.util.*;
+
+//This is  Morris algorithm with O(n) time complexity and O(1) space complexity
 public class MajorityNumber {
-        public static void main(String[] args) {
-            Scanner scanner = new Scanner(System.in);
-            System.out.print("Enter the size of the array: ");
-            int n = scanner.nextInt();
-            int[] arr = new int[n];
-            System.out.println("Enter the elements of the array:");
-            for (int i = 0; i < n; i++) {
-                arr[i] = scanner.nextInt();
+     
+    public static int majorityElement(int[] nums) {
+        int candidate = 0, count = 0;
+
+       //Find candidate
+        for (int num : nums) {
+            if (count == 0) {
+                candidate = num;
             }
-            Map<Integer, Integer> countMap = new HashMap<>();
-            for (int num : arr) {
-                countMap.put(num, countMap.getOrDefault(num, 0) + 1);   
+            count += (num == candidate) ? 1 : -1;
         }
-            int majorityElement = -1;
-            for (Map.Entry<Integer, Integer> entry : countMap.entrySet()) {
-                if (entry.getValue() > n / 2) {
-                    majorityElement = entry.getKey();
-                    break;
-                }
-            }
-            if (majorityElement != -1) {
-                System.out.println("The majority element is: " + majorityElement);
-            } else {
-                System.out.println("No majority element found.");
-            }
-            scanner.close();
+
+       
+        count = 0;
+        for (int num : nums) {
+            if (num == candidate) count++;
+        }
+        return count > nums.length / 2 ? candidate : -1; // -1 means no majority
     }
+
+    public static void main(String[] args) {
+        int[] nums = {2, 2, 1, 1, 1, 2, 2};
+        System.out.println("Majority Element = " + majorityElement(nums));
+    }
+
+
 }
