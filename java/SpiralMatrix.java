@@ -2,48 +2,47 @@
 
 import java.util.*;
 
-public class SpiralMatrix {
-    public static void main(String[] args) {
-        int n = 5;
-        int[][] ans = generateMatrix(n);
-        // Properly print the 2D array
-        for (int[] an : ans) {
-            System.out.println(Arrays.toString(an));
-        }
-    }
-    static int[][] generateMatrix(int n) {
-        int[][] result = new int[n][n];
-        int value = 1;
-
-        int colStart = 0, colEnd = n - 1, rowStart = 0, rowEnd = n - 1;
-
-        while (colStart <= colEnd && rowStart <= rowEnd) {
-            // Left to Right
-            for (int i = colStart; i <= colEnd; i++) {
-                result[rowStart][i] = value++;
+class Solution {
+    public int[][] generateMatrix(int n) {
+        int[][] matrix = new int[n][n];
+        
+        int left = 0, right = n - 1;
+        int top = 0, bottom = n - 1;
+        int num = 1;
+        
+        while (left <= right && top <= bottom) {
+            // fill top row
+            for (int i = left; i <= right; i++) {
+                matrix[top][i] = num++;
             }
-            rowStart++;
-            // Up to Down
-            for (int j = rowStart; j <= rowEnd; j++) {
-                result[j][colEnd] = value++;
+            top++;
+            
+            // fill right column
+            for (int i = top; i <= bottom; i++) {
+                matrix[i][right] = num++;
             }
-            colEnd--;
-            // Right to Left
-            if (rowStart <= rowEnd) {
-                for (int k = colEnd; k >= colStart; k--) {
-                    result[rowEnd][k] = value++;
+            right--;
+            
+            // fill bottom row
+            if (top <= bottom) {
+                for (int i = right; i >= left; i--) {
+                    matrix[bottom][i] = num++;
                 }
+                bottom--;
             }
-            rowEnd--;
-            //Down to Up
-            if (colStart <= colEnd) {
-                for (int l = rowEnd; l >= rowStart; l--) {
-                    result[l][colStart] = value++;
+            
+            // fill left column
+            if (left <= right) {
+                for (int i = bottom; i >= top; i--) {
+                    matrix[i][left] = num++;
                 }
+                left++;
             }
-            colStart++;
         }
-
-        return result;
+        
+        return matrix;
     }
 }
+
+// Time Complexity: O(n^2)
+// Space Complexity: O(1) (ignoring the output matrix)
