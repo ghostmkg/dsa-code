@@ -1,82 +1,68 @@
 // BFS from given source s
 import java.util.*;
+import java.util.*;
+import java.util.Queue;
+import java.util.LinkedList;
 
-class Main {
+public class BFS {
 
-    // BFS from given source s
-    static ArrayList<Integer> 
-        bfsOfGraph(ArrayList<ArrayList<Integer>> adj, 
-                int s, boolean[] visited, ArrayList<Integer> res) {
-
-        // Create a queue for BFS
+    static ArrayList<Integer> bfs(ArrayList<ArrayList<Integer>> adj) {
+        int V = adj.size();
+        ArrayList<Integer> result = new ArrayList<>();
+        boolean[] visited = new boolean[V];
         Queue<Integer> q = new LinkedList<>();
 
-        // Mark source node as visited and enqueue it
-        visited[s] = true;
-        q.add(s);
+        // Iterate through all vertices to ensure all components are visited
+        for (int startNode = 0; startNode < V; startNode++) {
+            
+            // Start BFS only if the node hasn't been visited (i.e., it's a new component)
+            if (!visited[startNode]) {
+                // Initialize the BFS for the new component
+                visited[startNode] = true;
+                q.add(startNode);
 
-        // Iterate over the queue
-        while (!q.isEmpty()) {
+                // Standard BFS logic
+                while (!q.isEmpty()) {
+                    int curr = q.poll();
+                    result.add(curr); // Add the current node to the result list
 
-            // Dequeue a vertex and store it
-            int curr = q.poll();
-            res.add(curr);
-
-            // Get all adjacent vertices of the dequeued 
-            // vertex curr If an adjacent has not been 
-            // visited, mark it visited and enqueue it
-            for (int x : adj.get(curr)) {
-                if (!visited[x]) {
-                    visited[x] = true;
-                    q.add(x);
+                    // Traverse neighbors
+                    for (int neighbor : adj.get(curr)) {
+                        if (!visited[neighbor]) {
+                            visited[neighbor] = true;
+                            q.add(neighbor);
+                        }
+                    }
                 }
             }
         }
-        return res;
-    }
-
-    // Perform BFS for the entire graph which maybe
-    // disconnected
-    static ArrayList<Integer> bfsDisconnected(
-                ArrayList<ArrayList<Integer>> adj) {
-        int V = adj.size();
-
-        // create an array to store the traversal
-        ArrayList<Integer> res = new ArrayList<>();
-
-        // Initially mark all the vertices as not visited
-        boolean[] visited = new boolean[V];
-
-        // perform BFS for each node
-        for (int i = 0; i < V; i++) {
-            if (!visited[i]) {
-                bfsOfGraph(adj, i, visited, res);
-            }
-        }
-        return res;
+        return result;
     }
 
     public static void main(String[] args) {
+        // Graph from the original example:
+        // Component 1: 0, 1, 2
+        // Component 2: 3, 4, 5
         ArrayList<ArrayList<Integer>> adj = new ArrayList<>();
-        adj.add(new ArrayList<>(Arrays.asList(1, 2)));
+        
+        // Node 0: neighbors 1, 2
+        adj.add(new ArrayList<>(Arrays.asList(1, 2))); 
+        // Node 1: neighbor 0
         adj.add(new ArrayList<>(Arrays.asList(0))); 
-        adj.add(new ArrayList<>(Arrays.asList(0)));   
+        // Node 2: neighbor 0
+        adj.add(new ArrayList<>(Arrays.asList(0))); 
+        // Node 3: neighbor 4
         adj.add(new ArrayList<>(Arrays.asList(4)));
+        // Node 4: neighbors 3, 5
         adj.add(new ArrayList<>(Arrays.asList(3, 5)));
-        adj.add(new ArrayList<>(Arrays.asList(4)));  
+        // Node 5: neighbor 4
+        adj.add(new ArrayList<>(Arrays.asList(4))); 
 
-        int src = 0;
-        ArrayList<Integer> ans = bfsDisconnected(adj);
+        ArrayList<Integer> ans = bfs(adj);
+        System.out.println("BFS Traversal:");
         for (int i : ans) {
             System.out.print(i + " ");
         }
+        System.out.println();
     }
 }
-
-// Output
-// 0 1 2 3 4 5 
-
-
-// Time Complexity: O(V + E), BFS explores all the vertices and edges in the graph. In the worst case, it visits every vertex and edge once. Therefore, the time complexity of BFS is O(V + E), where V and E are the number of vertices and edges in the given graph. 
-
-// Auxiliary Space: O(V), BFS uses a queue to keep track of the vertices that need to be visited. In the worst case, the queue can contain all the vertices in the graph. Therefore, the space complexity of BFS is O(V).
