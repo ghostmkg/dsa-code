@@ -1,4 +1,4 @@
-head = [1,2,3,4,5,6]
+sumhead = [1,2,3,4,5,6]
 
 def middleLinkList(head):
     temp = head
