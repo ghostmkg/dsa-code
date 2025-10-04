@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Avengers: Doomsday</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;700&family=Rubik+Gemstones&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Montserrat', Arial, sans-serif;
+      margin: 0;
+      background: linear-gradient(120deg, #232a34 0%, #181818 100%);
+      color: #f5f5f5;
+      min-height: 100vh;
+    }
+    header {
+      text-align: center;
+      padding: 2.5rem 0 1.5rem 0;
+    }
+    .Heading {
+      font-family: "Rubik Gemstones", system-ui;
+      font-size: 54px;
+      font-weight: 700;
+      margin-bottom: 0;
+      letter-spacing: 2px;
+      color: #00ff99;
+      text-shadow: 0 2px 16px #000, 0 0 2px #00ff99;
+    }
+    nav ul {
+      list-style-type: none;
+      margin: 0;
+      padding: 0;
+      background-color: #1a222b;
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    }
+    nav ul li {
+      margin: 0 8px;
+    }
+    nav ul li a {
+      display: block;
+      color: #f5f5f5;
+      text-align: center;
+      padding: 14px 22px;
+      text-decoration: none;
+      border-radius: 6px;
+      transition: background 0.2s, color 0.2s;
+      font-weight: 600;
+      letter-spacing: 1px;
+      font-size: 1.08em;
+    }
+    nav ul li a:hover {
+      background-color: #00ff99;
+      color: #232a34;
+    }
+    main {
+      max-width: 1000px;
+      margin: 2.5rem auto;
+      padding: 0 1.2rem;
+    }
+    .container {
+      background: rgba(35, 42, 52, 0.98);
+      border-radius: 16px;
+      box-shadow: 0 4px 32px rgba(0,0,0,0.5);
+      position: relative;
+      padding-bottom: 1rem;
+      margin-bottom: 2rem;
+    }
+    .mySlides {
+      display: none;
+      transition: opacity 0.5s;
+      border-radius: 16px 16px 0 0;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.3);
+    }
+    .mySlides img {
+      width: 100%;
+      height: auto;
+      border-radius: 16px 16px 0 0;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.3);
+    }
+    .prev, .next {
+      cursor: pointer;
+      position: absolute;
+      top: 44%;
+      width: auto;
+      padding: 16px;
+      color: #fff;
+      font-weight: bold;
+      font-size: 28px;
+      border-radius: 50%;
+      background: rgba(0,0,0,0.5);
+      user-select: none;
+      transition: background 0.2s;
+      z-index: 2;
+    }
+    .prev { left: 16px; }
+    .next { right: 16px; }
+    .prev:hover, .next:hover {
+      background: #00ff99;
+      color: #232a34;
+    }
+    .numbertext {
+      color: #e0e0e0;
+      font-size: 14px;
+      padding: 8px 12px;
+      position: absolute;
+      top: 0;
+      left: 0;
+      background: rgba(0,0,0,0.5);
+      border-radius: 0 0 8px 0;
+    }
+    .caption-container {
+      text-align: center;
+      background-color: #232a34;
+      padding: 12px 18px;
+      color: #f5f5f5;
+      font-size: 1.15rem;
+      border-radius: 0 0 16px 16px;
+      margin-bottom: 10px;
+      font-weight: 600;
+      letter-spacing: 1px;
+    }
+    .row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      justify-content: center;
+      margin-top: 12px;
+    }
+    .column {
+      flex: 1 1 120px;
+      max-width: 140px;
+    }
+    .demo_cursor {
+      opacity: 0.7;
+      border-radius: 10px;
+      transition: opacity 0.3s, border 0.3s;
+      cursor: pointer;
+      width: 100%;
+      height: auto;
+      object-fit: cover;
+      box-shadow: 0 1px 6px rgba(0,0,0,0.2);
+      border: 2px solid transparent;
+      background: #181818;
+    }
+    .active,
+    .demo_cursor:hover {
+      opacity: 1;
+      border: 2px solid #00ff99;
+      background: #232a34;
+    }
+    .between {
+      font-family: 'Montserrat', Arial, sans-serif;
+      background: rgba(35, 42, 52, 0.98);
+      border-radius: 16px;
+      margin: 2rem 0;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.2);
+      padding-bottom: 1rem;
+    }
+    .between h2 {
+      color: #00ff99;
+      padding: 10px;
+      text-shadow: 0 0 2px #00ff99;
+      font-size: 1.5em;
+      letter-spacing: 1px;
+    }
+    .between p {
+      color: #f5f5f5;
+      padding: 10px;
+      text-align: justify;
+      font-size: 1.08em;
+      line-height: 1.7;
+      text-shadow: 0 1px 2px #181818;
+    }
+    .character-section {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 24px;
+      justify-content: center;
+      margin: 40px 0 20px 0;
+    }
+    .character-box {
+      background: #181818;
+      color: #f5f5f5;
+      border-radius: 14px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.3);
+      width: 220px;
+      padding: 22px 18px 18px 18px;
+      text-align: center;
+      transition: transform 0.2s, box-shadow 0.2s;
+      border: 1.5px solid #232a34;
+      cursor: pointer;
+      position: relative;
+    }
+    .character-box:hover {
+      transform: translateY(-8px) scale(1.04);
+      box-shadow: 0 8px 32px rgba(0,255,153,0.13);
+      border: 2px solid #00ff99;
+    }
+    .character-img {
+      width: 84px;
+      height: 84px;
+      object-fit: cover;
+      border-radius: 50%;
+      margin-bottom: 14px;
+      border: 2px solid #00ff99;
+      background: #232a34;
+    }
+    .character-name {
+      font-size: 1.22em;
+      font-weight: bold;
+      margin-bottom: 8px;
+      color: #00ff99;
+      text-shadow: 0 0 2px #00ff99;
+      letter-spacing: 1px;
+    }
+    .character-desc {
+      font-size: 1em;
+      color: #e0e0e0;
+      text-shadow: 0 1px 2px #181818;
+      line-height: 1.5;
+    }
+    /* Popup styles */
+    .popup {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0; top: 0;
+      width: 100vw; height: 100vh;
+      background: rgba(0,0,0,0.7);
+      justify-content: center;
+      align-items: center;
+    }
+    .popup-content {
+      background: #232a34;
+      color: #f5f5f5;
+      border-radius: 18px;
+      padding: 36px 28px 28px 28px;
+      max-width: 350px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+      text-align: center;
+      position: relative;
+      animation: fadeIn 0.3s;
+    }
+    .popup-content img {
+      width: 110px;
+      height: 110px;
+      border-radius: 50%;
+      margin-bottom: 18px;
+      border: 2px solid #00ff99;
+      background: #181818;
+    }
+    .popup-content h3 {
+      color: #00ff99;
+      margin-bottom: 12px;
+      font-size: 1.3em;
+      letter-spacing: 1px;
+    }
+    .popup-content p {
+      color: #e0e0e0;
+      font-size: 1.07em;
+      line-height: 1.6;
+      margin-bottom: 0;
+    }
+    .close-btn {
+      position: absolute;
+      top: 12px;
+      right: 18px;
+      font-size: 1.5em;
+      color: #00ff99;
+      background: none;
+      border: none;
+      cursor: pointer;
+      transition: color 0.2s;
+    }
+    .close-btn:hover {
+      color: #fff;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.95);}
+      to { opacity: 1; transform: scale(1);}
+    }
+    /* New sections */
+    .section {
+      background: rgba(35, 42, 52, 0.98);
+      border-radius: 16px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.2);
+      margin: 2rem 0;
+      padding: 2rem 1.2rem;
+    }
+    .section h2 {
+      color: #00ff99;
+      margin-bottom: 1rem;
+      text-align: center;
+      font-size: 1.5em;
+      letter-spacing: 1px;
+      text-shadow: 0 0 2px #00ff99;
+    }
+    .section p {
+      color: #f5f5f5;
+      font-size: 1.08em;
+      line-height: 1.7;
+      text-align: justify;
+      text-shadow: 0 1px 2px #181818;
+      margin-bottom: 0.5rem;
+    }
+    /* Subtle divider */
+    .divider {
+      border: none;
+      border-top: 1.5px solid #333c4a;
+      margin: 2.5rem 0 2rem 0;
+      opacity: 0.5;
+    }
+    /* Responsive design */
+    @media (max-width: 700px) {
+      nav ul { flex-direction: column; }
+      nav ul li { margin: 0; }
+      nav ul li a { padding: 10px 8px; font-size: 0.95rem; }
+      main { padding: 0; }
+      .container { border-radius: 0; }
+      .row { gap: 5px; }
+      .column { max-width: 90px; }
+      .character-section {
+        flex-direction: column;
+        align-items: center;
+      }
+      .character-box {
+        width: 90vw;
+        margin-bottom: 16px;
+      }
+      .popup-content {
+        max-width: 90vw;
+        padding: 24px 8px;
+      }
+      .section { padding: 1.2rem 0.5rem; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h2 class="Heading">Avengers: Doomsday</h2>
+  </header>
+  <nav>
+    <ul>
+      <li><a href="https://marvelcinematicuniverse.fandom.com/wiki/Avengers:_Doomsday">Doomsday</a></li>
+      <li><a href="https://theweek.com/culture-life/film/how-iron-man-became-dr-doom">Theory</a></li>
+      <li><a href="https://www.reddit.com/r/FantasticFour/comments/17im7aq/how_dr_doom_is_the_greatest_threat_in_the_marvel/">Threat</a></li>
+      <li><a href="https://marvelcinematicuniverse.fandom.com/wiki/Avengers:_Doomsday">Fandom Wiki</a></li>
+      <li><a href="https://www.youtube.com/watch?v=aZXBFirj6b4">Trailer</a></li>
+    </ul>
+  </nav>
+  <main>
+    <div class="container">
+      <div class="mySlides">
+        <div class="numbertext">1 / 6</div>
+        <img src="https://media.gettyimages.com/id/2163996734/photo/marvel-studios-panel-at-sdcc.jpg?s=1024x1024&w=gi&k=20&c=t3GX7oTaAZMi8g2hd_kw4jjSUin1vtBANOcqS5FbsiE=" alt="Doomsday?">
+      </div>
+      <div class="mySlides">
+        <div class="numbertext">2 / 6</div>
+        <img src="https://media.gettyimages.com/id/2163995108/photo/2024-comic-con-international-san-diego-marvel-studios-panel.jpg?s=1024x1024&w=gi&k=20&c=C6W9rb6ewW2TUlf6s4EaxYXPYqBQzAwtvCAaETdIXlk=" alt="Is he real?">
+      </div>
+      <div class="mySlides">
+        <div class="numbertext">3 / 6</div>
+        <img src="https://media.gettyimages.com/id/2163995112/photo/2024-comic-con-international-san-diego-marvel-studios-panel.jpg?s=1024x1024&w=gi&k=20&c=gVRWShmcP9g8b3wyLb7gFLm-G3k6YXNtIqOyItt0xLw=" alt="Whatt??">
+      </div>
+      <div class="mySlides">
+        <div class="numbertext">4 / 6</div>
+        <img src="https://media.gettyimages.com/id/2163995217/photo/2024-comic-con-international-san-diego-marvel-studios-panel.jpg?s=1024x1024&w=gi&k=20&c=qzrjKZXeMujbXjxxWgSCv6lFZkuHsCQ4duDtsVaMacM=" alt="Masked">
+      </div>
+      <div class="mySlides">
+        <div class="numbertext">5 / 6</div>
+        <img src="https://media.gettyimages.com/id/2163996794/photo/marvel-studios-panel-at-sdcc.jpg?s=1024x1024&w=gi&k=20&c=hLKYRcLnCzcKAjFAar-Og_unFC6M5hjhJC_WhWcaLAA=" alt="The Directors">
+      </div>
+      <div class="mySlides">
+        <div class="numbertext">6 / 6</div>
+        <img src="https://media.gettyimages.com/id/2163362506/photo/2024-san-diego-international-comic-con-day-3-panels.jpg?s=1024x1024&w=gi&k=20&c=VrVlR4r8tm6LqbWaTj96PUzgdJP7JIl-f1UBg1IG82Q=" alt="Everything">
+      </div>
+      <a class="prev" onclick="plusSlides(-1)" aria-label="Previous slide">❮</a>
+      <a class="next" onclick="plusSlides(1)" aria-label="Next slide">❯</a>
+      <div class="caption-container">
+        <p id="caption"></p>
+      </div>
+      <div class="row">
+        <div class="column">
+          <img class="demo_cursor" src="https://media.gettyimages.com/id/2163996734/photo/marvel-studios-panel-at-sdcc.jpg?s=1024x1024&w=gi&k=20&c=t3GX7oTaAZMi8g2hd_kw4jjSUin1vtBANOcqS5FbsiE=" onclick="currentSlide(1)" alt="Doomsday?">
+        </div>
+        <div class="column">
+          <img class="demo_cursor" src="https://media.gettyimages.com/id/2163995108/photo/2024-comic-con-international-san-diego-marvel-studios-panel.jpg?s=1024x1024&w=gi&k=20&c=C6W9rb6ewW2TUlf6s4EaxYXPYqBQzAwtvCAaETdIXlk=" onclick="currentSlide(2)" alt="Is he real?">
+        </div>
+        <div class="column">
+          <img class="demo_cursor" src="https://media.gettyimages.com/id/2163995112/photo/2024-comic-con-international-san-diego-marvel-studios-panel.jpg?s=1024x1024&w=gi&k=20&c=gVRWShmcP9g8b3wyLb7gFLm-G3k6YXNtIqOyItt0xLw=" onclick="currentSlide(3)" alt="Whatt??">
+        </div>
+        <div class="column">
+          <img class="demo_cursor" src="https://media.gettyimages.com/id/2163995217/photo/2024-comic-con-international-san-diego-marvel-studios-panel.jpg?s=1024x1024&w=gi&k=20&c=qzrjKZXeMujbXjxxWgSCv6lFZkuHsCQ4duDtsVaMacM=" onclick="currentSlide(4)" alt="Masked">
+        </div>
+        <div class="column">
+          <img class="demo_cursor" src="https://media.gettyimages.com/id/2163996794/photo/marvel-studios-panel-at-sdcc.jpg?s=1024x1024&w=gi&k=20&c=hLKYRcLnCzcKAjFAar-Og_unFC6M5hjhJC_WhWcaLAA=" onclick="currentSlide(5)" alt="The Directors">
+        </div>
+        <div class="column">
+          <img class="demo_cursor" src="https://media.gettyimages.com/id/2163362506/photo/2024-san-diego-international-comic-con-day-3-panels.jpg?s=1024x1024&w=gi&k=20&c=VrVlR4r8tm6LqbWaTj96PUzgdJP7JIl-f1UBg1IG82Q=" onclick="currentSlide(6)" alt="Everything">
+        </div>
+      </div>
+      <div class="between">
+        <h2>About Movie</h2>
+        <p>
+          "Avengers: Doomsday" is an upcoming film in the Marvel Cinematic Universe (MCU) that promises to be a thrilling addition to the franchise. The movie is set to explore the emergence of a formidable new villain, Doctor Doom, who poses a significant threat to the Avengers and the entire world. Known for his intelligence, mastery of both science and sorcery, and his ruthless ambition, Doctor Doom is expected to challenge the heroes in unprecedented ways. The film will likely delve into the origins and motivations of Doctor Doom, providing a deeper understanding of his character. Fans can anticipate high-stakes action, complex character dynamics, and the continuation of the MCU's rich storytelling tradition. With a talented cast and crew, "Avengers: Doomsday" is poised to be a must-watch event for superhero enthusiasts and moviegoers alike.
+        </p>
+        <h2>Release Date</h2>
+        <p style="text-align: center;">
+          "Avengers: Doomsday" is scheduled for release on May 1, 2026.
+        </p>
+        <h2>Director & Cast</h2>
+        <p>
+          "Avengers: Doomsday" is directed by Destin Daniel Cretton, known for his work on "Shang-Chi and the Legend of the Ten Rings." Cretton brings a unique vision and style to the Marvel Cinematic Universe (MCU), and his involvement in this project has generated significant excitement among fans. The film boasts an impressive cast, including returning favorites such as Robert Downey Jr. as Iron Man, Chris Evans as Captain America, Scarlett Johansson as Black Widow, and Chris Hemsworth as Thor. Additionally, new characters are expected to be introduced, further expanding the MCU's rich tapestry of heroes and villains. The combination of Cretton's direction and the talented ensemble cast promises to deliver a compelling and action-packed cinematic experience for audiences worldwide.
+        </p>
+        <div class="character-section">
+          <div class="character-box" onclick="showPopup('Iron Man')">
+            <img class="character-img" src="https://imgs.search.brave.com/dYWQfLYCEsydjRsMoggmMYDQT0dW8PqajtLID28Sbw0/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly93YWxs/cGFwZXJzLmNvbS9p/bWFnZXMvaGQvaXJv/bi1tYW4tbWFyay04/NS1zYWNyaWZpY2Ut/czdweThybDZnNTZk/cjR6cC5qcGc" alt="Iron Man">
+            <div class="character-name">Iron Man</div>
+            <div class="character-desc">
+              Genius inventor and leader, Tony Stark returns to face Doctor Doom with new tech and resolve.
+            </div>
+          </div>
+          <div class="character-box" onclick="showPopup('Captain America')">
+            <img class="character-img" src="https://imgs.search.brave.com/ZuRR1A2Ks0htcgEKEiUHFhF2jU9ZuipwKQEDP8Ac5Yk/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9pLnBp/bmltZy5jb20vb3Jp/Z2luYWxzL2NlLzFj/LzEzL2NlMWMxMzI5/ZTUwZmM2MTE3YjEw/ODdkZTU4MDY1OTAz/LmpwZw" alt="Captain America">
+            <div class="character-name">Captain America</div>
+            <div class="character-desc">
+              Steve Rogers stands as the moral compass of the Avengers, ready to defend against any threat.
+            </div>
+          </div>
+          <div class="character-box" onclick="showPopup('Black Widow')">
+            <img class="character-img" src="https://imgs.search.brave.com/-wha0wrGkbj9YVq_iT-pZVNsRajGejnzC4ZHYZFZoxA/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9pLnBp/bmltZy5jb20vb3Jp/Z2luYWxzLzVjLzg0/L2I5LzVjODRiOWVi/MjE2Y2VhOTU3NWRm/ZWEwNzk1M2UxMmQ0/LmpwZw" alt="Black Widow">
+            <div class="character-name">Black Widow</div>
+            <div class="character-desc">
+              Natasha Romanoff uses her espionage skills and combat expertise to outsmart powerful foes.
+            </div>
+          </div>
+          <div class="character-box" onclick="showPopup('Thor')">
+            <img class="character-img" src="https://imgs.search.brave.com/Jcvq6Wu4WiseAvUfrlYm4kZSSuOZovToxKva8uC1KZY/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly93d3cu/bGF2YW5ndWFyZGlh/LmNvbS9wZWxpY3Vs/YXMtc2VyaWVzL2lt/YWdlcy9hbGwvbW92/aWUvcG9zdGVycy8y/MDExLzQvbW92aWUt/MTAxOTUvdzEyODAv/d1VwREJkZVJwY1cz/TnJMYUw0S2hjUWw0/Nkl4LmpwZw" alt="Thor">
+            <div class="character-name">Thor</div>
+            <div class="character-desc">
+              The God of Thunder wields Mjolnir and his cosmic power to protect Earth from destruction.
+            </div>
+          </div>
+          <div class="character-box" onclick="showPopup('Doctor Doom')">
+            <img class="character-img" src="https://imgs.search.brave.com/INutaKHdfHjCz3tR4JMw88T9bhjXV-UDaTrOveEIojA/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly93YWxs/cGFwZXJzLWNsYW4u/Y29tL3dwLWNvbnRl/bnQvdXBsb2Fkcy8y/MDI0LzA4L2RvY3Rv/ci1kb29tLXBmcC0z/NS5qcGc" alt="Doctor Doom">
+            <div class="character-name">Doctor Doom</div>
+            <div class="character-desc">
+              Victor Von Doom, master of science and sorcery, emerges as the Avengers' greatest adversary.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <hr class="divider">
+    <!-- New Section: Plot -->
+    <div class="section">
+      <h2>Plot Overview</h2>
+      <p>
+        The Avengers face their greatest challenge yet as Doctor Doom unleashes a plan that threatens the very fabric of reality. With alliances tested and new heroes rising, the team must unite to stop Doom's catastrophic ambitions. Expect twists, betrayals, and epic battles across the globe.
+      </p>
+    </div>
+    <!-- New Section: Trivia -->
+    <div class="section">
+      <h2>Trivia & Fun Facts</h2>
+      <ul style="color:#baffd9; font-size:1.07em; line-height:1.7; margin:0 0 0 1.2em;">
+        <li>Doctor Doom's armor in the film is inspired by classic comic designs.</li>
+        <li>The movie features cameos from lesser-known Marvel heroes.</li>
+        <li>Several scenes were filmed on location in Europe for authenticity.</li>
+        <li>The cast underwent special training for the film's intense action sequences.</li>
+      </ul>
+    </div>
+    <!-- New Section: Fan Theories -->
+    <div class="section">
+      <h2>Fan Theories</h2>
+      <p>
+        Fans speculate that Iron Man may have a secret alliance with Doctor Doom, and that the film could introduce the Fantastic Four into the MCU. Some believe the ending will set up a new era of Marvel movies, with unexpected twists for beloved characters.
+      </p>
+    </div>
+    <!-- Character Popup -->
+    <div id="characterPopup" class="popup" onclick="closePopup(event)">
+      <div class="popup-content" id="popupContent">
+        <button class="close-btn" onclick="closePopup(event)">&times;</button>
+        <!-- Content will be injected by JS -->
+      </div>
+    </div>
+  </main>
+  <script>
+    let slideIndex = 1;
+    showSlides(slideIndex);
+
+    function plusSlides(n) {
+      showSlides(slideIndex += n);
+    }
+
+    function currentSlide(n) {
+      showSlides(slideIndex = n);
+    }
+
+    function showSlides(n) {
+      let i;
+      let slides = document.getElementsByClassName("mySlides");
+      let dots = document.getElementsByClassName("demo_cursor");
+      let captionText = document.getElementById("caption");
+      if (n > slides.length) {slideIndex = 1}
+      if (n < 1) {slideIndex = slides.length}
+      for (i = 0; i < slides.length; i++) {
+        slides[i].style.display = "none";
+      }
+      for (i = 0; i < dots.length; i++) {
+        dots[i].className = dots[i].className.replace(" active", "");
+      }
+      slides[slideIndex-1].style.display = "block";
+      dots[slideIndex-1].className += " active";
+      captionText.innerHTML = dots[slideIndex-1].alt;
+    }
+
+    // Character popup data
+    const characterDetails = {
+      "Iron Man": {
+        img: "https://imgs.search.brave.com/dYWQfLYCEsydjRsMoggmMYDQT0dW8PqajtLID28Sbw0/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly93YWxs/cGFwZXJzLmNvbS9p/bWFnZXMvaGQvaXJv/bi1tYW4tbWFyay04/NS1zYWNyaWZpY2Ut/czdweThybDZnNTZk/cjR6cC5qcGc",
+        name: "Iron Man",
+        desc: "Tony Stark, the genius billionaire, returns with upgraded armor and new technology. His leadership and wit are crucial in the fight against Doctor Doom.",
+      },
+      "Captain America": {
+        img: "https://imgs.search.brave.com/ZuRR1A2Ks0htcgEKEiUHFhF2jU9ZuipwKQEDP8Ac5Yk/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9pLnBp/bmltZy5jb20vb3Jp/Z2luYWxzL2NlLzFj/LzEzL2NlMWMxMzI5/ZTUwZmM2MTE3YjEw/ODdkZTU4MDY1OTAz/LmpwZw",
+        name: "Captain America",
+        desc: "Steve Rogers stands as the moral compass of the Avengers. His tactical skills and unwavering courage inspire the team to stand strong against adversity.",
+      },
+      "Black Widow": {
+        img: "https://imgs.search.brave.com/-wha0wrGkbj9YVq_iT-pZVNsRajGejnzC4ZHYZFZoxA/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9pLnBp/bmltZy5jb20vb3Jp/Z2luYWxzLzVjLzg0/L2I5LzVjODRiOWVi/MjE2Y2VhOTU3NWRm/ZWEwNzk1M2UxMmQ0/LmpwZw",
+        name: "Black Widow",
+        desc: "Natasha Romanoff uses her espionage skills and combat expertise to outsmart powerful foes. She uncovers secrets that could change the fate of the Avengers.",
+      },
+      "Thor": {
+        img: "https://imgs.search.brave.com/Jcvq6Wu4WiseAvUfrlYm4kZSSuOZovToxKva8uC1KZY/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly93d3cu/bGF2YW5ndWFyZGlh/LmNvbS9wZWxpY3Vs/YXMtc2VyaWVzL2lt/YWdlcy9hbGwvbW92/aWUvcG9zdGVycy8y/MDExLzQvbW92aWUt/MTAxOTUvdzEyODAv/d1VwREJkZVJwY1cz/TnJMYUw0S2hjUWw0/Nkl4LmpwZw",
+        name: "Thor",
+        desc: "The God of Thunder wields Mjolnir and his cosmic power to protect Earth from destruction. Thor's strength and loyalty are vital in the battle against Doom.",
+      },
+      "Doctor Doom": {
+        img: "https://imgs.search.brave.com/INutaKHdfHjCz3tR4JMw88T9bhjXV-UDaTrOveEIojA/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly93YWxs/cGFwZXJzLWNsYW4u/Y29tL3dwLWNvbnRl/bnQvdXBsb2Fkcy8y/MDI0LzA4L2RvY3Rv/ci1kb29tLXBmcC0z/NS5qcGc",
+        name: "Doctor Doom",
+        desc: "Victor Von Doom, master of science and sorcery, emerges as the Avengers' greatest adversary. His intellect and power make him a threat unlike any before.",
+      }
+    };
+
+    function showPopup(character) {
+      const popup = document.getElementById('characterPopup');
+      const content = document.getElementById('popupContent');
+      const data = characterDetails[character];
+      if (data) {
+        content.innerHTML = `
+          <button class="close-btn" onclick="closePopup(event)">&times;</button>
+          <img src="${data.img}" alt="${data.name}">
+          <h3>${data.name}</h3>
+          <p>${data.desc}</p>
+        `;
+        popup.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+      }
+    }
+    function closePopup(event) {
+      // Only close if clicking the background or close button
+      if (event.target.classList.contains('popup') || event.target.classList.contains('close-btn')) {
+        document.getElementById('characterPopup').style.display = 'none';
+        document.body.style.overflow = '';
+      }
+    }
+  </script>
+</body>
+</html>

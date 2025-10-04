@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Comprehensive HTML Form Demo</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background: linear-gradient(135deg, #f9fbff, #fafff9);
+        padding: 20px;
+        color: #333;
+      }
+      form {
+        background: #fff;
+        padding: 20px;
+        border-radius: 12px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      }
+      fieldset {
+        border: 1px solid #ddd;
+        margin-bottom: 15px;
+        padding: 15px;
+        border-radius: 8px;
+      }
+      legend {
+        font-weight: bold;
+        padding: 0 5px;
+      }
+      label {
+        display: block;
+        margin-top: 10px;
+        font-weight: 600;
+      }
+      input,
+      select,
+      textarea,
+      button,
+      output,
+      meter {
+        display: block;
+        width: 98%;
+        margin-top: 5px;
+        padding: 1%;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+        font-size: 14px;
+      }
+      input[type="color"] {
+        width: 10%;
+        height: 80px;
+      }
+      input[type="checkbox"],
+      input[type="radio"] {
+        display: inline-block;
+        width: auto;
+        margin-right: 5px;
+      }
+      .inline-label {
+        display: inline-block;
+        margin-right: 15px;
+      }
+      button,
+      input[type="submit"],
+      input[type="reset"] {
+        background: #6c9cff;
+        color: #fff;
+        border: none;
+        margin-top: 15px;
+        cursor: pointer;
+        transition: 0.3s;
+      }
+      button:hover,
+      input[type="submit"]:hover,
+      input[type="reset"]:hover {
+        background: #5887db;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>All Input Types Form</h1>
+    
+    <form action="https://postman-echo.com/post" method="post" enctype="multipart/form-data">
+      <fieldset>
+        <legend>Personal Information</legend>
+
+        <label for="profilepicture">Profile Picture</label>
+        <input
+          type="file"
+          id="profilepicture"
+          name="profilepicture"
+          accept=".jpg, .jpeg, .png"
+        />
+
+        <label for="fname">First Name</label>
+        <input
+          type="text"
+          id="fname"
+          name="fname"
+          placeholder="John"
+          required
+        />
+
+        <label for="lname">Last Name</label>
+        <input type="text" id="lname" name="lname" placeholder="Doe" required />
+
+        <label for="username">Username</label>
+        <input type="text" id="username" name="username" />
+
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password" />
+
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" />
+      </fieldset>
+
+      <fieldset>
+        <legend>Contact</legend>
+        <label for="tel">Phone</label>
+        <input type="tel" id="tel" name="tel" />
+
+        <label for="url">Website</label>
+        <input type="url" id="url" name="url" />
+
+        <label for="search">Search</label>
+        <input type="search" id="search" name="search" />
+
+        <label for="color">Favorite Color</label>
+        <input type="color" id="color" name="color" value="#000000" />
+      </fieldset>
+
+      <fieldset>
+        <!--
+            For preselected: selected
+        -->
+        <legend>Preferences</legend>
+        <label for="role">Role</label>
+        <select id="role" name="role">
+          <option value="" selected>Select...</option>
+          <option value="Frontend">Frontend Developer</option>
+          <option value="Backend">Backend Developer</option>
+          <option value="Design">Designer</option>
+        </select>
+
+        <label>Skills</label>
+        <label class="inline-label"
+          ><input type="checkbox" name="skills" value="js" />JavaScript</label
+        >
+        <label class="inline-label"
+          ><input type="checkbox" name="skills" value="py" />Python</label
+        >
+
+        <label>Experience</label>
+        <label class="inline-label"
+          ><input type="radio" name="exp" value="junior"  />Junior</label
+        >
+        <label class="inline-label"
+          ><input type="radio" name="exp" value="senior" />Senior</label
+        >
+      </fieldset>
+
+      <fieldset>
+        <legend>Dates & Numbers</legend>
+        <label for="date">Date</label>
+        <input type="date" id="date" name="date" />
+
+        <label for="time">Time</label>
+        <input type="time" id="time" name="time" />
+        <label for="datetime">Date & Time</label>
+        <input type="datetime-local" id="datetime" name="datetime" />
+
+        <label for="month">Month</label>
+        <input type="month" id="month" name="month" />
+
+        <label for="week">Week</label>
+        <input type="week" id="week" name="week" />
+
+        <label for="num">Number</label>
+        <input type="number" id="num" name="num" min="0" max="100" />
+
+        <label for="range">Range</label>
+        <input
+          type="range"
+          id="range"
+          name="range"
+          min="0"
+          max="10"
+          value="5"
+          oninput="output.value=this.value"
+        />
+        <output id="output">5</output>
+
+        <label for="datalist">Country</label>
+        <input id="datalist" list="countries" name="country" />
+        <datalist id="countries">
+          <option value="India"></option>
+          <option value="USA"></option>
+          <option value="Japan"></option>
+        </datalist>
+      </fieldset>
+
+      <fieldset>
+        <legend>Files</legend>
+        <label for="file">Upload Files</label>
+        <input type="file" id="file" name="file" multiple />
+      </fieldset>
+
+      <fieldset>
+        <legend>Misc</legend>
+        <label for="bio">Short Bio</label>
+        <textarea id="bio" name="bio"></textarea>
+
+        <label>Progress</label>
+        <meter value="0.7">70%</meter>
+
+        <input type="hidden" name="token" value="12345" />
+      </fieldset>
+
+      <input type="submit" value="Submit" />
+      <input type="reset" value="Reset" />
+    </form>
+  </body>
+</html>
+<select name="" id=""></select>
