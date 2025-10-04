@@ -1,42 +1,12 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-#define ll long long
-#define f(i, a, b) for (int i = a; i < b; i++)
-#define all(x) x.begin(), x.end()
-#define vprint(v)            \
-    for (auto &elem : v)     \
-        cout << elem << " "; \
-    cout << endl;
-#define vmatprint(vv)            \
-    for (auto &row : vv)         \
-    {                            \
-        for (auto &elem : row)   \
-            cout << elem << " "; \
-        cout << endl;            \
-    }                            \
-    cout << endl;
-#define mprint(m)                                       \
-    for (auto it : m)                                   \
-        cout << it.first << " : " << it.second << endl; \
-    cout << endl;
-#define vint vector<int>
-#define vstring vector<string>
-#define vmat vector<vector<int>>
 #define FAST_IO                       \
     ios_base::sync_with_stdio(false); \
     cin.tie(NULL);                    \
     cout.tie(NULL)
-#define pii pair<int, int>
-#define pll pair<ll, ll>
-#define mii map<int, int>
-#define mll map<ll, ll>
 
-const int INF = 1e9;
-const ll MOD = 1e9 + 7;
-
-struct TreeNode
-{
+struct TreeNode {
     int val;
     TreeNode *left;
     TreeNode *right;
@@ -46,35 +16,45 @@ struct TreeNode
     TreeNode(int x, TreeNode *l, TreeNode *r) : val(x), left(l), right(r) {}
 };
 
-int check(TreeNode *root)
-{
-    if (root == NULL)
-    {
+// Helper function returns the height of the tree if balanced
+// Returns -1 if the subtree is unbalanced
+int checkHeight(TreeNode *root) {
+    if (!root)
         return 0;
-    }
-    int lh = check(root->left);
-    int rh = check(root->right);
-    if (lh == -1 || rh == -1)
+
+    int leftHeight = checkHeight(root->left);
+    if (leftHeight == -1) return -1;  // Left subtree not balanced
+
+    int rightHeight = checkHeight(root->right);
+    if (rightHeight == -1) return -1; // Right subtree not balanced
+
+    // If height difference is more than 1, unbalanced
+    if (abs(leftHeight - rightHeight) > 1)
         return -1;
-    if (abs(lh - rh) > 1)
-        return -1;
-    return max(lh, rh) + 1;
+
+    // Return height of subtree rooted at current node
+    return max(leftHeight, rightHeight) + 1;
 }
 
-bool isBalanced(TreeNode *root)
-{
-    int x = check(root);
-    if (x == -1)
-    {
-        return false;
-    }
-    return true;
+// Returns true if the tree is height-balanced, false otherwise
+bool isBalanced(TreeNode *root) {
+    return checkHeight(root) != -1;
 }
 
-int main()
-{
+int main() {
     FAST_IO;
+
+    // Example usage: create a balanced tree
+    TreeNode *root = new TreeNode(1,
+                        new TreeNode(2,
+                            new TreeNode(4),
+                            new TreeNode(5)),
+                        new TreeNode(3));
+
+    if (isBalanced(root))
+        cout << "Tree is balanced\n";
+    else
+        cout << "Tree is not balanced\n";
 
     return 0;
 }
-// by ad73prem

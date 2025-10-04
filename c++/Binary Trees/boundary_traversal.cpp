@@ -8,24 +8,11 @@ using namespace std;
     for (auto &elem : v)     \
         cout << elem << " "; \
     cout << endl;
-#define mprint(m)                                       \
-    for (auto it : m)                                   \
-        cout << it.first << " : " << it.second << endl; \
-    cout << endl;
 #define vint vector<int>
-#define vstring vector<string>
-#define vmat vector<vector<int>>
 #define FAST_IO                       \
     ios_base::sync_with_stdio(false); \
     cin.tie(NULL);                    \
     cout.tie(NULL)
-#define pii pair<int, int>
-#define pll pair<ll, ll>
-#define mii map<int, int>
-#define mll map<ll, ll>
-
-const int INF = 1e9;
-const ll MOD = 1e9 + 7;
 
 struct TreeNode
 {
@@ -37,54 +24,46 @@ struct TreeNode
     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
 };
 
-int left(TreeNode *root)
-{
-}
-
-// gets the left boundary wihtout the leaf nodes
+// Gets the left boundary without leaf nodes
 void getLeftBoundary(TreeNode *node, vector<int> &ans)
 {
     while (node)
     {
-        if (node->left || node->right)
-        {
+        if (node->left || node->right) // Not a leaf
             ans.push_back(node->val);
-        }
+
         if (node->left)
-        {
             node = node->left;
-        }
         else
-        {
             node = node->right;
-        }
     }
 }
 
+// Gets the right boundary without leaf nodes
 void getRightBoundary(TreeNode *node, vector<int> &ans)
 {
+    vector<int> temp;
     while (node)
     {
-        if (node->left || node->right)
-        {
-            ans.push_back(node->val);
-        }
+        if (node->left || node->right) // Not a leaf
+            temp.push_back(node->val);
+
         if (node->right)
-        {
             node = node->right;
-        }
         else
-        {
             node = node->left;
-        }
     }
+    // Add right boundary in reverse order
+    for (int i = (int)temp.size() - 1; i >= 0; i--)
+        ans.push_back(temp[i]);
 }
 
+// Gets all leaf nodes in left-to-right order
 void getLeafNodes(TreeNode *node, vector<int> &ans)
 {
-    if (node == NULL)
+    if (!node)
         return;
-    if (node->left == NULL && node->right == NULL)
+    if (!node->left && !node->right)
     {
         ans.push_back(node->val);
         return;
@@ -93,24 +72,27 @@ void getLeafNodes(TreeNode *node, vector<int> &ans)
     getLeafNodes(node->right, ans);
 }
 
+// Returns the boundary traversal of the tree
 vector<int> boundaryTraversal(TreeNode *root)
 {
     vector<int> ans;
-    TreeNode *node = root;
-    getLeftBoundary(node, ans);
-    vprint(ans);
-    vector<int> ans2;
-    getRightBoundary(node, ans2);
-    vprint(ans2);
-    vector<int> ans3;
-    getLeafNodes(node, ans3);
-    vprint(ans3);
-    vector<int> final;
-    final.insert(final.end(), ans.begin(), ans.end());
-    final.insert(final.end(), ans3.begin(), ans3.end());
-    reverse(ans2.begin(), ans2.end());
-    final.insert(final.end(), ans2.begin(), ans2.end() - 1);
-    vprint(final);
+    if (!root)
+        return ans;
+
+    // Add root value if it is not a leaf node
+    if (root->left || root->right)
+        ans.push_back(root->val);
+
+    // Get left boundary
+    getLeftBoundary(root->left, ans);
+
+    // Get leaf nodes
+    getLeafNodes(root, ans);
+
+    // Get right boundary
+    getRightBoundary(root->right, ans);
+
+    return ans;
 }
 
 int main()
@@ -127,8 +109,10 @@ int main()
     root->right->right->left = new TreeNode(9);
     root->right->right->left->left = new TreeNode(10);
     root->right->right->left->right = new TreeNode(11);
+
     vint ans = boundaryTraversal(root);
+    cout << "Boundary Traversal: ";
     vprint(ans);
+
     return 0;
 }
-// by ad73prem

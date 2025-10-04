@@ -1,15 +1,23 @@
 #include <iostream>
-using namespace std ;
+using namespace std;
 
-int main () {
-    int A[7] = {4,8,6,9,5,2,7} ;
-    int n = 7 ;
+// Program to calculate the sum of all elements in an array
+int main() {
+    // Initialize array
+    int A[] = {4, 8, 6, 9, 5, 2, 7};
+
+    // Calculate number of elements dynamically
+    int n = sizeof(A) / sizeof(A[0]);
+
     int sum = 0;
 
-    for (int i=0;i<7;i++)
-    {
-        sum = sum + A[i];
+    // Loop through the array to calculate sum
+    for (int i = 0; i < n; i++) {
+        sum += A[i];
     }
-    cout<<"Sum is "<< sum;
+
+    // Output the result
+    cout << "Sum of array elements = " << sum << endl;
+
     return 0;
 }
