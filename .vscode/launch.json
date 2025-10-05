@@ -75,9 +75,99 @@
       "miDebuggerPath": "gdb",
       "setupCommands": [
         {
-          "description": "Enable pretty-printing for gdb",
-          "text": "-enable-pretty-printing",
-          "ignoreFailures": true
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "description": "Enable pretty-printing for gdb",
+            "text": "-enable-pretty-printing",
+            "ignoreFailures": true
+        },
+        {
+            "type": "java",
+            "name": "MaximumSubarray",
+            "request": "launch",
+            "mainClass": "MaximumSubarray",
+            "projectName": "dsa-code_26e89efe"
+        },
+        {
+            "type": "java",
+            "name": "mergeTwoLists",
+            "request": "launch",
+            "mainClass": "mergeTwoLists",
+            "projectName": "dsa-code_26e89efe"
+        },
+        {
+            "type": "java",
+            "name": "Main",
+            "request": "launch",
+            "mainClass": "Main",
+            "projectName": "dsa-code_26e89efe"
+        },
+        {
+            "name": "Java",
+            "type": "java",
+            "request": "launch",
+            "stopOnEntry": true,
+            "jdkPath": "${env:JAVA_HOME}/bin",
+            "cwd": "${fileDirname}",
+            "startupClass": "${fileBasenameNoExtension}",
+            "classpath": [
+                ".",
+                "${fileDirname}"
+            ]
+        },
+        {
+            "name": "Java Console App",
+            "type": "java",
+            "request": "launch",
+            "stopOnEntry": true,
+            "jdkPath": "${env:JAVA_HOME}/bin",
+            "cwd": "${fileDirname}",
+            "startupClass": "${fileBasenameNoExtension}",
+            "classpath": [
+                ".",
+                "${fileDirname}"
+            ],
+            "externalConsole": true
+        },
+        {
+            "type": "java",
+            "name": "Current File",
+            "request": "launch",
+            "mainClass": "${file}"
+        },
+        {
+            "type": "java",
+            "name": "RotateImage",
+            "request": "launch",
+            "mainClass": "RotateImage",
+            "projectName": "dsa-code_cb401e8"
+        },
+        {
+            "type": "java",
+            "name": "Secondlargest",
+            "request": "launch",
+            "mainClass": "Secondlargest",
+            "projectName": "dsa-code_cb401e8"
+        },
+        {
+            "type": "java",
+            "name": "Sort_Ascending_Order",
+            "request": "launch",
+            "mainClass": "Sort_Ascending_Order",
+            "projectName": "dsa-code_cb401e8"
+        },
+        {
+            "type": "java",
+            "name": "hellowordl",
+            "request": "launch",
+            "mainClass": "hellowordl",
+            "projectName": "dsa-code_cb401e8"
+        }
+    ]
+}
+
         }
       ]
     }

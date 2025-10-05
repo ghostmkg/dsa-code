@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Online Notepad</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    :root{--bg:#f4f7f9;--fg:#333;--muted:#7f8c8d;--card:#fff;--border:#e0e0e0;--accent:#4a90e2;--danger:#e74c3c;--success:#27ae60;--shadow:0 4px 12px rgba(0,0,0,.1)}
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);color:var(--fg);margin:0;display:flex;justify-content:center;align-items:center;transition:background-color .4s,color .4s}
+    body.dark{--bg:#1e1e1e;--fg:#e0e0e0;--muted:#a1a1a1;--card:#2c2c2c;--border:#3a3a3a;--accent:#6aa7ff;--danger:#ff5a4f;--success:#2ecc71}
+    .container{width:92%;max-width:1100px;height:90vh;display:flex;flex-direction:column;background:var(--card);border-radius:12px;box-shadow:var(--shadow);padding:1.25rem;gap:0.8rem}
+    header{display:flex;gap:1rem;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);padding-bottom:.6rem}
+    .brand{display:flex;align-items:center;gap:.6rem}
+    h1{font-size:1.25rem;line-height:1.1;margin:0}
+    #datetime{font-size:.85rem;color:var(--muted)}
+    .title-row{display:flex;gap:.6rem;align-items:center;flex-wrap:wrap}
+    #title{flex:1;min-width:200px;border:1px solid var(--border);border-radius:8px;padding:.6rem .8rem;font-size:1rem;background:transparent;color:inherit;outline:none}
+    .toolbar{display:flex;flex-wrap:wrap;gap:.5rem}
+    .btn{padding:.55rem .9rem;border:none;border-radius:8px;font-weight:600;font-size:.95rem;cursor:pointer;background:#f1f4f7;color:#222;transition:filter .2s,opacity .2s}
+    .btn:disabled{opacity:.6;cursor:not-allowed}
+    .btn:hover{filter:brightness(.98)}
+    .primary{background:var(--accent);color:#fff}
+    .danger{background:var(--danger);color:#fff}
+    .success{background:var(--success);color:#fff}
+    .ghost{background:transparent;border:1px solid var(--border);color:inherit}
+    .split{display:grid;grid-template-columns:1fr 1fr;gap:.8rem;flex:1;min-height:0}
+    .pane{display:flex;flex-direction:column;min-height:0}
+    .pane-label{display:flex;justify-content:space-between;align-items:center;margin:.2rem 0;color:var(--muted);font-size:.9rem}
+    #notepad{flex:1;border:1px solid var(--border);border-radius:10px;padding:1rem;font-size:1rem;line-height:1.6;resize:none;background:transparent;color:inherit;outline:none}
+    #notepad:focus{border-color:var(--accent)}
+    #preview{flex:1;border:1px solid var(--border);border-radius:10px;padding:1rem;overflow:auto}
+    #preview h1,#preview h2,#preview h3,#preview h4,#preview h5,#preview h6{margin:.6rem 0}
+    #preview pre{padding:.7rem;border-radius:8px;overflow:auto;border:1px solid var(--border)}
+    #stats{font-size:.9rem;color:var(--muted);display:flex;gap:1rem;justify-content:flex-end}
+    #saveMsg{font-size:.9rem;color:var(--success);opacity:0;transition:opacity .25s}
+    #saveMsg.show{opacity:1}
+    .footer{display:flex;align-items:center;justify-content:space-between;gap:.6rem;flex-wrap:wrap;border-top:1px solid var(--border);padding-top:.6rem}
+    .snap-row{display:flex;align-items:center;gap:.5rem}
+    select, input[type="file"]{border:1px solid var(--border);border-radius:8px;background:transparent;color:inherit;padding:.5rem .6rem;outline:none}
+    .findbar{display:none;gap:.4rem;align-items:center}
+    .findbar.show{display:flex}
+    @media (max-width:980px){.split{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="brand">
+        <h1>📝 Online Notepad</h1>
+      </div>
+      <div id="datetime"></div>
+    </header>
+
+    <div class="title-row">
+      <input id="title" type="text" inputmode="text" autocomplete="off" spellcheck="false">
+      <div class="toolbar">
+        <button id="previewToggle" class="btn ghost">Preview</button>
+        <button id="copyBtn" class="btn ghost">Copy</button>
+        <button id="downloadTxt" class="btn">TXT</button>
+        <button id="downloadMd" class="btn">MD</button>
+        <button id="downloadHtml" class="btn">HTML</button>
+        <label class="btn ghost" for="importFile">Import</label>
+        <input id="importFile" type="file" accept=".txt,.md,.markdown,.log" style="display:none">
+        <button id="themeToggle" class="btn">🌙</button>
+        <button id="clearBtn" class="btn danger">Clear</button>
+        <button id="snapshotBtn" class="btn success">Snapshot</button>
+      </div>
+    </div>
+
+    <div class="findbar" id="findbar">
+      <input id="findInput" type="text" placeholder="" autocomplete="off" spellcheck="false">
+      <input id="replaceInput" type="text" placeholder="" autocomplete="off" spellcheck="false">
+      <button id="findNext" class="btn ghost">Find</button>
+      <button id="replaceOne" class="btn ghost">Replace</button>
+      <button id="replaceAll" class="btn ghost">Replace All</button>
+      <button id="closeFind" class="btn ghost">Close</button>
+    </div>
+
+    <div class="split" id="split">
+      <div class="pane">
+        <div class="pane-label"><span>Editor</span><span id="saveMsg">Saved</span></div>
+        <textarea id="notepad"></textarea>
+      </div>
+      <div class="pane" id="previewPane" style="display:none">
+        <div class="pane-label"><span>Preview</span></div>
+        <div id="preview"></div>
+      </div>
+    </div>
+
+    <div class="footer">
+      <div class="snap-row">
+        <select id="snapshotList"></select>
+        <button id="restoreSnap" class="btn ghost">Restore</button>
+        <button id="deleteSnap" class="btn ghost">Delete</button>
+      </div>
+      <div id="stats">Words: 0 • Characters: 0 • Read: 0 min</div>
+    </div>
+  </div>
+
+  <script>
+    const el = id => document.getElementById(id);
+    const notepad = el('notepad');
+    const titleInput = el('title');
+    const clearBtn = el('clearBtn');
+    const downloadTxt = el('downloadTxt');
+    const downloadMd = el('downloadMd');
+    const downloadHtml = el('downloadHtml');
+    const themeToggle = el('themeToggle');
+    const copyBtn = el('copyBtn');
+    const counter = el('stats');
+    const saveMsg = el('saveMsg');
+    const datetime = el('datetime');
+    const preview = el('preview');
+    const previewPane = el('previewPane');
+    const previewToggle = el('previewToggle');
+    const importFile = el('importFile');
+    const snapshotBtn = el('snapshotBtn');
+    const snapshotList = el('snapshotList');
+    const restoreSnap = el('restoreSnap');
+    const deleteSnap = el('deleteSnap');
+    const findbar = el('findbar');
+    const findInput = el('findInput');
+    const replaceInput = el('replaceInput');
+    const findNext = el('findNext');
+    const replaceOne = el('replaceOne');
+    const replaceAll = el('replaceAll');
+    const closeFind = el('closeFind');
+
+    const LS_NOTE = 'userNote';
+    const LS_TITLE = 'noteTitle';
+    const LS_THEME = 'theme';
+    const LS_SNAPS = 'noteSnapshots';
+    const SNAP_LIMIT = 20;
+
+    function nowISO(){return new Date().toISOString()}
+    function bytesLen(s){return new Blob([s]).size}
+
+    function loadState(){
+      const savedNote = localStorage.getItem(LS_NOTE) || '';
+      const savedTitle = localStorage.getItem(LS_TITLE) || 'Untitled';
+      const savedTheme = localStorage.getItem(LS_THEME) || 'light';
+      const snaps = JSON.parse(localStorage.getItem(LS_SNAPS) || '[]');
+      notepad.value = savedNote;
+      titleInput.value = savedTitle;
+      if(savedTheme==='dark') document.body.classList.add('dark');
+      updateStats();
+      renderPreview();
+      updateThemeButton();
+      fillSnapshots(snaps);
+      updateDateTime();
+    }
+
+    function saveNote(){
+      localStorage.setItem(LS_NOTE, notepad.value);
+      localStorage.setItem(LS_TITLE, titleInput.value || 'Untitled');
+      pulseSave();
+    }
+
+    function pulseSave(){
+      saveMsg.classList.add('show');
+      setTimeout(()=>saveMsg.classList.remove('show'), 700);
+    }
+
+    function updateDateTime(){
+      datetime.textContent = new Date().toLocaleString();
+      setTimeout(updateDateTime, 60000);
+    }
+
+    function updateStats(){
+      const t = notepad.value;
+      const words = t.trim() ? t.trim().split(/\s+/).length : 0;
+      const chars = t.length;
+      const readMin = Math.max(0, Math.ceil(words/200));
+      counter.textContent = `Words: ${words} • Characters: ${chars} • Read: ${readMin} min`;
+    }
+
+    function download(name, data, mime){
+      const blob = new Blob([data], {type: mime});
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = name;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+    }
+
+    function setTheme(mode){
+      document.body.classList.toggle('dark', mode==='dark');
+      localStorage.setItem(LS_THEME, mode);
+      updateThemeButton();
+    }
+
+    function updateThemeButton(){
+      const isDark = document.body.classList.contains('dark');
+      themeToggle.textContent = isDark ? '☀️' : '🌙';
+    }
+
+    function togglePreview(){
+      const isShown = previewPane.style.display !== 'none';
+      previewPane.style.display = isShown ? 'none' : 'flex';
+      previewToggle.classList.toggle('primary', !isShown);
+      renderPreview();
+    }
+
+    function escapeHtml(s){
+      return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    }
+
+    function mdToHtml(md){
+      let s = md.replace(/\r\n/g,'\n');
+      const blocks = [];
+      const lines = s.split('\n');
+      let i=0;
+      while(i<lines.length){
+        if(lines[i].startsWith('```')){
+          const lang = lines[i].slice(3).trim();
+          i++;
+          const buf=[];
+          while(i<lines.length && !lines[i].startsWith('```')){buf.push(lines[i]);i++}
+          i++;
+          blocks.push(`<pre><code>${escapeHtml(buf.join('\n'))}</code></pre>`);
+          continue;
+        }
+        blocks.push(lines[i]);
+        i++;
+      }
+      s = blocks.join('\n');
+      s = s.replace(/^\s*######\s+(.*)$/gm,'<h6>$1</h6>')
+           .replace(/^\s*#####\s+(.*)$/gm,'<h5>$1</h5>')
+           .replace(/^\s*####\s+(.*)$/gm,'<h4>$1</h4>')
+           .replace(/^\s*###\s+(.*)$/gm,'<h3>$1</h3>')
+           .replace(/^\s*##\s+(.*)$/gm,'<h2>$1</h2>')
+           .replace(/^\s*#\s+(.*)$/gm,'<h1>$1</h1>');
+      s = s.replace(/^\s*[-*]\s+(.*)$/gm,'<li>$1</li>');
+      s = s.replace(/(<li>.*<\/li>)(\n(?!<li>))/g,'<ul>$1</ul>\n');
+      s = s.replace(/\*\*([^*]+)\*\*/g,'<strong>$1</strong>');
+      s = s.replace(/\*([^*\n]+)\*/g,'<em>$1</em>');
+      s = s.replace(/`([^`\n]+)`/g,'<code>$1</code>');
+      s = s.replace(/\[([^\]]+)\]\(([^)]+)\)/g,'<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>');
+      s = s.split('\n').map(line=>{
+        if(/^<h\d|^<ul>|^<\/ul>|^<li>|^<pre>|^<\/pre>|^<p>|^<\/p>/.test(line)) return line;
+        if(line.trim()==='') return '';
+        return `<p>${line}</p>`;
+      }).join('\n');
+      return s;
+    }
+
+    function renderPreview(){
+      if(previewPane.style.display==='none') return;
+      const content = notepad.value;
+      preview.innerHTML = mdToHtml(content);
+    }
+
+    function fillSnapshots(arr){
+      snapshotList.innerHTML = '';
+      const opts = arr.slice().reverse();
+      opts.forEach(s=>{
+        const o = document.createElement('option');
+        o.value = s.id;
+        o.textContent = `${new Date(s.date).toLocaleString()} • ${s.title} • ${Math.round(s.bytes/1024)} KB`;
+        snapshotList.appendChild(o);
+      });
+    }
+
+    function getSnaps(){
+      return JSON.parse(localStorage.getItem(LS_SNAPS) || '[]');
+    }
+
+    function setSnaps(snaps){
+      localStorage.setItem(LS_SNAPS, JSON.stringify(snaps));
+      fillSnapshots(snaps);
+    }
+
+    function createSnapshot(){
+      const snaps = getSnaps();
+      const snap = {id: crypto.randomUUID(), title: titleInput.value || 'Untitled', date: nowISO(), bytes: bytesLen(notepad.value), note: notepad.value};
+      snaps.push(snap);
+      while(snaps.length>SNAP_LIMIT) snaps.shift();
+      setSnaps(snaps);
+      pulseSave();
+    }
+
+    function restoreSnapshot(){
+      const id = snapshotList.value;
+      if(!id) return;
+      const snaps = getSnaps();
+      const s = snaps.find(x=>x.id===id);
+      if(!s) return;
+      notepad.value = s.note;
+      titleInput.value = s.title;
+      saveNote();
+      updateStats();
+      renderPreview();
+    }
+
+    function deleteSnapshot(){
+      const id = snapshotList.value;
+      if(!id) return;
+      const snaps = getSnaps().filter(x=>x.id!==id);
+      setSnaps(snaps);
+    }
+
+    function copyToClipboard(){
+      navigator.clipboard.writeText(notepad.value).then(pulseSave);
+    }
+
+    function importFromFile(file){
+      const r = new FileReader();
+      r.onload = e=>{
+        notepad.value = e.target.result;
+        saveNote();
+        updateStats();
+        renderPreview();
+      };
+      r.readAsText(file);
+    }
+
+    function showFindBar(){
+      findbar.classList.add('show');
+      findInput.focus();
+    }
+
+    function hideFindBar(){
+      findbar.classList.remove('show');
+    }
+
+    function findNextInTextarea(){
+      const text = notepad.value;
+      const query = findInput.value;
+      if(!query) return;
+      const start = notepad.selectionEnd;
+      const idx = text.indexOf(query, start);
+      const wrapIdx = text.indexOf(query, 0);
+      const pos = idx!==-1 ? idx : wrapIdx;
+      if(pos===-1) return;
+      notepad.focus();
+      notepad.setSelectionRange(pos, pos+query.length);
+    }
+
+    function replaceSelection(){
+      const query = findInput.value;
+      const repl = replaceInput.value;
+      const selStart = notepad.selectionStart;
+      const selEnd = notepad.selectionEnd;
+      if(selEnd>selStart){
+        const before = notepad.value.slice(0, selStart);
+        const after = notepad.value.slice(selEnd);
+        notepad.value = before + repl + after;
+        const cursor = selStart + repl.length;
+        notepad.setSelectionRange(cursor, cursor);
+        saveNote();
+        updateStats();
+        renderPreview();
+      }else{
+        findNextInTextarea();
+      }
+    }
+
+    function replaceAllInTextarea(){
+      const q = findInput.value;
+      const r = replaceInput.value;
+      if(!q) return;
+      const re = new RegExp(q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'),'g');
+      notepad.value = notepad.value.replace(re, r);
+      saveNote();
+      updateStats();
+      renderPreview();
+    }
+
+    window.addEventListener('load', loadState);
+
+    let saveTimer=null;
+    notepad.addEventListener('input', ()=>{
+      if(saveTimer) clearTimeout(saveTimer);
+      saveTimer = setTimeout(()=>{ saveNote(); updateStats(); renderPreview(); }, 200);
+    });
+
+    titleInput.addEventListener('input', ()=>{ localStorage.setItem(LS_TITLE, titleInput.value || 'Untitled'); pulseSave(); });
+
+    clearBtn.addEventListener('click', ()=>{
+      if(confirm('Clear note?')){
+        notepad.value='';
+        saveNote();
+        updateStats();
+        renderPreview();
+      }
+    });
+
+    copyBtn.addEventListener('click', copyToClipboard);
+
+    downloadTxt.addEventListener('click', ()=> download((titleInput.value||'Note')+'.txt', notepad.value, 'text/plain'));
+    downloadMd.addEventListener('click', ()=> download((titleInput.value||'Note')+'.md', notepad.value, 'text/markdown'));
+    downloadHtml.addEventListener('click', ()=>{
+      const body = mdToHtml(notepad.value);
+      const html = `<!doctype html><html><head><meta charset="utf-8"><title>${(titleInput.value||'Note')}</title><meta name="viewport" content="width=device-width,initial-scale=1"><style>body{font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;max-width:800px;margin:2rem auto;padding:0 1rem;line-height:1.6}pre{border:1px solid #e0e0e0;border-radius:8px;padding:.75rem;overflow:auto}</style></head><body>${body}</body></html>`;
+      download((titleInput.value||'Note')+'.html', html, 'text/html');
+    });
+
+    themeToggle.addEventListener('click', ()=>{
+      const isDark = document.body.classList.contains('dark');
+      setTheme(isDark ? 'light' : 'dark');
+    });
+
+    previewToggle.addEventListener('click', togglePreview);
+
+    importFile.addEventListener('change', e=>{
+      const f = e.target.files[0];
+      if(f) importFromFile(f);
+      importFile.value='';
+    });
+
+    snapshotBtn.addEventListener('click', createSnapshot);
+    restoreSnap.addEventListener('click', restoreSnapshot);
+    deleteSnap.addEventListener('click', deleteSnapshot);
+
+    document.addEventListener('dragover', e=>{ e.preventDefault() });
+    document.addEventListener('drop', e=>{
+      e.preventDefault();
+      if(e.dataTransfer.files && e.dataTransfer.files[0]) importFromFile(e.dataTransfer.files[0]);
+    });
+
+    document.addEventListener('keydown', e=>{
+      if((e.ctrlKey||e.metaKey) && e.key.toLowerCase()==='s'){ e.preventDefault(); saveNote(); }
+      if((e.ctrlKey||e.metaKey) && e.key.toLowerCase()==='b'){
+        e.preventDefault();
+        wrapSelection('**','**');
+      }
+      if((e.ctrlKey||e.metaKey) && e.key.toLowerCase()==='i'){
+        e.preventDefault();
+        wrapSelection('*','*');
+      }
+      if((e.ctrlKey||e.metaKey) && e.key.toLowerCase()==='f'){
+        e.preventDefault();
+        showFindBar();
+      }
+      if(e.key==='Escape'){ hideFindBar() }
+      if((e.ctrlKey||e.metaKey) && e.key.toLowerCase()==='p'){
+        e.preventDefault();
+        togglePreview();
+      }
+    });
+
+    findNext.addEventListener('click', findNextInTextarea);
+    replaceOne.addEventListener('click', replaceSelection);
+    replaceAll.addEventListener('click', replaceAllInTextarea);
+    closeFind.addEventListener('click', hideFindBar);
+
+    function wrapSelection(left,right){
+      const start = notepad.selectionStart;
+      const end = notepad.selectionEnd;
+      const v = notepad.value;
+      const sel = v.slice(start,end);
+      const wrapped = left + sel + right;
+      notepad.value = v.slice(0,start) + wrapped + v.slice(end);
+      const cursor = start + wrapped.length;
+      notepad.setSelectionRange(cursor,cursor);
+      saveNote();
+      renderPreview();
+      updateStats();
+    }
+  </script>
+</body>
+</html>

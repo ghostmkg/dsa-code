@@ -1,12 +1,14 @@
 # Problem: Longest Substring Without Repeating Characters
 
 ## Difficulty
+
 **Medium**
 
 ## Category
-- Strings  
-- Sliding Window  
-- Hash Map  
+
+- Strings
+- Sliding Window
+- Hash Map
 
 ---
 
@@ -18,7 +20,7 @@ Given a string `s`, find the **length of the longest substring** without repeati
 
 ## Input
 
-- A string `s` consisting of English letters, digits, symbols, and spaces.  
+- A string `s` consisting of English letters, digits, symbols, and spaces.
 - `1 <= s.length <= 10^4`
 
 ---
@@ -32,18 +34,21 @@ Given a string `s`, find the **length of the longest substring** without repeati
 ## Examples
 
 ### Example 1:
-- **Input:** `"abcabcbb"`  
-- **Output:** `3`  
+
+- **Input:** `"abcabcbb"`
+- **Output:** `3`
 - **Explanation:** The answer is `"abc"`, with the length of 3.
 
 ### Example 2:
-- **Input:** `"bbbbb"`  
-- **Output:** `1`  
+
+- **Input:** `"bbbbb"`
+- **Output:** `1`
 - **Explanation:** The answer is `"b"`, with the length of 1.
 
 ### Example 3:
-- **Input:** `"pwwkew"`  
-- **Output:** `3`  
+
+- **Input:** `"pwwkew"`
+- **Output:** `3`
 - **Explanation:** The answer is `"wke"`, with the length of 3.
 
 ---
@@ -52,6 +57,7 @@ Given a string `s`, find the **length of the longest substring** without repeati
 
 ```javascript
 console.log(lengthOfLongestSubstring("abcabcbb")); // 3
-console.log(lengthOfLongestSubstring("bbbbb"));    // 1
-console.log(lengthOfLongestSubstring("pwwkew"));   // 3
-console.log(lengthOfLongestSubstring(""));         // 0
+console.log(lengthOfLongestSubstring("bbbbb")); // 1
+console.log(lengthOfLongestSubstring("pwwkew")); // 3
+console.log(lengthOfLongestSubstring("")); // 0
+```

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Counter</title>
+    <style>
+        body{
+            font-family: sans-serif,"Segoe UI";
+            background-color: black;
+            color:antiquewhite;
+        }
+        #heading{
+            text-align: center;
+        }
+        #count{
+            text-align: center;
+            font-size: 150px;
+        }
+        div{
+            align-items: center;
+            display: flex;
+            justify-content:center ;
+            gap: 50px;
+        }
+        div button{
+            color: white;
+            background-color: blue;
+            padding: 20px;
+            border: 3px solid;
+            border-color: antiquewhite;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1 id="heading">My Counter</h1>
+    <h1 id="count">0</h1>
+    <div>
+        <button id="increase">Increase</button>
+        <button id="reset">Reset</button>
+        <button id="decrease">Decrease</button>
+    </div>
+    <script>
+        let count = 0;
+        document.getElementById("increase").onclick = function () {
+        count += 1;
+        document.getElementById("count").textContent = count;
+        };
+        document.getElementById("decrease").onclick = function () {
+        count -= 1;
+        if (count > 0) {
+            document.getElementById("count").textContent = count;
+        } else if (count === 0) {
+            // window.alert("Click to increase");
+            document.getElementById("count").textContent = 0;
+        } else {
+            window.alert("Invalid start");
+        }
+        };
+        document.getElementById("reset").onclick = function () {
+            count = 0;
+            document.getElementById("count").textContent = count;
+        };
+    </script>
+</body>
+</html>
