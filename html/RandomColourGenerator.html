@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Random Color Generator</title>
+  <style>
+    body { font-family: Arial; text-align: center; margin-top: 100px; }
+    #colorBox { width: 150px; height: 150px; margin: 20px auto; border: 2px solid #000; }
+    button { padding: 10px 15px; font-size: 16px; cursor: pointer; }
+  </style>
+</head>
+<body>
+  <h1>Random Color Generator</h1>
+  <div id="colorBox"></div>
+  <p id="colorCode">Click the button to generate a color!</p>
+  <button onclick="generateColor()">Generate Color</button>
+
+  <script>
+    function generateColor() {
+      const randomColor = '#' + Math.floor(Math.random() * 16777215)
+        .toString(16)
+        .padStart(6, '0');
+      document.getElementById("colorBox").style.backgroundColor = randomColor;
+      document.getElementById("colorCode").textContent = randomColor;
+    }
+  </script>
+</body>
+</html>

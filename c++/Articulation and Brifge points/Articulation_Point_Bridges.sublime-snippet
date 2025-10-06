@@ -1,0 +1,100 @@
+<snippet>
+	<content><![CDATA[
+/*Question
+-
+If I delete a node how many components will be formed in a graph ?
+-
+find articukation point
+-
+find bridges
+*/
+#define MAXN 100100
+vector<ll> g[MAXN];
+ll inTime[MAXN],loTime[MAXN];
+ll timer=0;
+ll numSplit[MAXN];
+
+void dfs(ll node,ll p){
+	timer++;
+	inTime[node] = loTime[node] = timer;
+	bool isArti = false;
+	ll child = 0;
+
+	numSplit[node] = 1;
+
+	for(auto x:g[node]){
+		if(x!=node){
+			if(!inTime[x]){ // node - x id  forward edge
+				child ++;
+				dfs(x,node);
+				
+				// update lotime[node]
+				// lotime[x] // because we can jump indirectly // kind of dp
+				loTime[node] = min(loTime[node],loTime[x]);
+
+				// update isArti // node is Arti point w.r.t. x
+				if(loTime[x]>=inTime[node]){
+					isArti = true; // x will be a new component
+					numSplit[node]++;
+				}
+
+				// update bridge
+				if(loTime[x]>inTime[node]){
+					// node - x is a bridge
+				}
+			}else{// node -x is backedge
+				//update lotime[node]
+				// intime[x] // because we will jump directly // base case
+				loTime[node]=min(loTime[node],inTime[x]);
+
+			}
+		}
+	}
+	if(p==0){ // root corner case
+		numSplit[node]=child;
+	}
+	// this is final test whether node is articulation point or not
+	if(((p==0) && (child>=2)) || ((p!=0) && isArti)){
+		// this node is articulation point
+		cout<<"Art :"<<node<<endl;	
+	}
+}
+
+void solve(){
+	ll n,m;
+	cin>>n>>m;
+	for(int i=0;i<m;i++){
+		ll a,b;cin>>a>>b;
+		g[a].pb(b);
+		g[b].pb(a);
+	}
+	
+	// incase of singleton node if delete a node,
+	// you will get a decrease in component ,
+	// edge/corner case
+
+	ll comp=0;
+
+	// graph can be diconnected
+	for(int i=1;i<=n;i++){
+		if(!inTime[i]){
+			comp++;
+			dfs(i,0);
+		}
+	}
+
+	for(int i=1;i<=n;i++){
+		if(g[i].size()==0){ // case of singleton node
+			cout<<comp - 1<<endl;;
+		}else{
+			cout<<comp + numSplit[i] - 1<<endl;
+		}
+	}
+
+}
+]]></content>
+	<!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+	<tabTrigger>Articulation Point Bridges </tabTrigger>
+	<!-- Optional: Set a scope to limit where the snippet will trigger -->
+	<scope>source.c++</scope>
+</snippet>
