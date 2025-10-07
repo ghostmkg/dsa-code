@@ -2,6 +2,48 @@
   "version": "0.2.0",
   "configurations": [
     {
+      "type": "java",
+      "name": "CountVowels",
+      "request": "launch",
+      "mainClass": "CountVowels",
+      "projectName": "dsa-code_26e89efe"
+    },
+    {
+      "type": "java",
+      "name": "Permutations",
+      "request": "launch",
+      "mainClass": "Permutations",
+      "projectName": "dsa-code_26e89efe"
+    },
+    {
+      "type": "java",
+      "name": "LongestSubstring",
+      "request": "launch",
+      "mainClass": "LongestSubstring",
+      "projectName": "dsa-code_26e89efe"
+    },
+    {
+      "type": "java",
+      "name": "MaximumSubarray",
+      "request": "launch",
+      "mainClass": "MaximumSubarray",
+      "projectName": "dsa-code_26e89efe"
+    },
+    {
+      "type": "java",
+      "name": "mergeTwoLists",
+      "request": "launch",
+      "mainClass": "mergeTwoLists",
+      "projectName": "dsa-code_26e89efe"
+    },
+    {
+      "type": "java",
+      "name": "Main",
+      "request": "launch",
+      "mainClass": "Main",
+      "projectName": "dsa-code_26e89efe"
+    },
+    {
       "name": "Java",
       "type": "java",
       "request": "launch",

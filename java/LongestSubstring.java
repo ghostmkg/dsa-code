@@ -1,33 +1,21 @@
-import java.util.*;
-
 public class LongestSubstring {
     public static int lengthOfLongestSubstring(String s) {
-        HashSet<Character> set = new HashSet<>();
-        int left = 0, maxLength = 0;
+        int[] lastIndex = new int[128]; // ASCII
+        for (int i = 0; i < 128; i++) lastIndex[i] = -1;
 
-        for (int right = 0; right < s.length(); right++) {
-            while (set.contains(s.charAt(right))) {
-                set.remove(s.charAt(left));
-                left++;
+        int maxLen = 0, start = 0;
+        for (int end = 0; end < s.length(); end++) {
+            char c = s.charAt(end);
+            if (lastIndex[c] >= start) {
+                start = lastIndex[c] + 1;
             }
-            set.add(s.charAt(right));
-            maxLength = Math.max(maxLength, right - left + 1);
+            lastIndex[c] = end;
+            maxLen = Math.max(maxLen, end - start + 1);
         }
-
-        return maxLength;
+        return maxLen;
     }
 
     public static void main(String[] args) {
-        String s = "abcabcbb";
-        System.out.println("Input: " + s);
-        System.out.println("Longest Substring Length: " + lengthOfLongestSubstring(s));
-
-        s = "pwwkew";
-        System.out.println("Input: " + s);
-        System.out.println("Longest Substring Length: " + lengthOfLongestSubstring(s));
-
-        s = "bbbbb";
-        System.out.println("Input: " + s);
-        System.out.println("Longest Substring Length: " + lengthOfLongestSubstring(s));
+        System.out.println(lengthOfLongestSubstring("abcabcbb")); // Output: 3
     }
 }

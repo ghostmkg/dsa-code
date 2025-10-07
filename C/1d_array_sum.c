@@ -1,17 +1,23 @@
 #include <stdio.h>
 
-int main()
-{
-    int n;
-    int sum=0;
-    printf("Enter the number of elements in array\n");
-    scanf("%d",&n);
-    int arr[n];
-    printf("Enter the elements of array\n");
-    for (int i=0;i<n;i++)
-    {
-        scanf("%d",&arr[i]);
-        sum += arr[i];
+int main() {
+    int n, sum = 0;
+
+    // Ask user for number of elements
+    printf("Enter the number of elements in the array: ");
+    scanf("%d", &n);
+
+    int arr[n]; // Declare array of size n
+
+    // Input array elements
+    printf("Enter the elements of the array:\n");
+    for (int i = 0; i < n; i++) {
+        scanf("%d", &arr[i]);
+        sum += arr[i]; // Add each element to sum
     }
-    printf("The sum of elements is %d\n",sum);
+
+    // Display the sum
+    printf("The sum of the elements is: %d\n", sum);
+
+    return 0;
 }

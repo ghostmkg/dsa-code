@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Number Guess</title>
+  </head>
+  <body style="margin:0; font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, 'Apple Color Emoji', 'Segoe UI Emoji'; min-height:100vh; display:flex; align-items:center; justify-content:center; background: radial-gradient(1200px 600px at 10% 10%, #e9f0ff 0%, #f7f9ff 30%, #ffffff 60%), linear-gradient(135deg, #eef2ff 0%, #f8fafc 100%); color:#0f172a;">
+    <div style="width: min(92vw, 420px); background:#ffffff; border:1px solid #e5e7eb; border-radius:16px; box-shadow: 0 10px 30px rgba(2,6,23,0.07), 0 2px 8px rgba(2,6,23,0.06); overflow:hidden;">
+      <div style="padding:22px 22px 12px; background: linear-gradient(180deg, #ffffff 0%, #fbfdff 100%);">
+        <h1 style="margin:0 0 6px; font-size:22px; letter-spacing:0.2px;">Number Guess 🔢</h1>
+        <p style="margin:0; color:#475569; font-size:14px;">I'm thinking of a number between 1 and 100. Can you guess it in 10 tries?</p>
+      </div>
+
+      <div style="padding:22px;">
+        <form id="guessForm" style="display:flex; gap:10px; align-items:center;" autocomplete="off">
+          <input id="guessInput" type="number" min="1" max="100" placeholder="Enter 1-100" required aria-label="Your guess" style="flex:1; padding:12px 14px; border:1px solid #e5e7eb; border-radius:12px; outline:none; font-size:15px; transition: box-shadow .2s, border-color .2s; box-shadow: inset 0 1px 0 rgba(2,6,23,0.02);" onfocus="this.style.borderColor='#6366f1'; this.style.boxShadow='0 0 0 4px rgba(99,102,241,0.15), inset 0 1px 0 rgba(2,6,23,0.02)';" onblur="this.style.borderColor='#e5e7eb'; this.style.boxShadow='inset 0 1px 0 rgba(2,6,23,0.02)';" />
+
+          <button type="submit" style="padding:12px 16px; border:0; border-radius:12px; background:#6366f1; color:#fff; font-weight:600; cursor:pointer; font-size:15px; transition: transform .05s ease, background .2s;">
+            Guess
+          </button>
+        </form>
+
+        <div id="message" role="status" aria-live="polite" style="margin-top:14px; padding:12px 14px; border-radius:12px; background:#f8fafc; color:#0f172a; border:1px dashed #e5e7eb; font-size:14px;">Make your first guess!</div>
+
+        <div style="display:flex; gap:10px; margin-top:14px;">
+          <div style="flex:1; background:#f8fafc; border:1px solid #eef2ff; border-radius:12px; padding:12px 14px;">
+            <div style="font-size:12px; color:#64748b;">Attempts left</div>
+            <div id="attempts" style="font-size:18px; font-weight:700;">10</div>
+          </div>
+          <div style="flex:2; background:#f8fafc; border:1px solid #eef2ff; border-radius:12px; padding:12px 14px;">
+            <div style="font-size:12px; color:#64748b;">Your guesses</div>
+            <div id="history" style="font-size:14px; color:#0f172a; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">—</div>
+          </div>
+        </div>
+
+        <button id="resetBtn" type="button" style="margin-top:16px; width:100%; padding:12px 16px; border:1px solid #e5e7eb; background:#fff; color:#0f172a; border-radius:12px; font-weight:600; cursor:pointer; display:none;">Play again</button>
+      </div>
+
+      <div style="padding:14px 22px; border-top:1px solid #f1f5f9; background:#fafafa; color:#64748b; font-size:12px; display:flex; justify-content:space-between; align-items:center;">
+        <span>Tip: Use hints to zero in quickly.</span>
+        <a href="#" onclick="revealRange(); return false;" style="color:#6366f1; font-weight:600; text-decoration:none;">Hint</a>
+      </div>
+    </div>
+
+    <script>
+      (function () {
+        const form = document.getElementById('guessForm');
+        const input = document.getElementById('guessInput');
+        const message = document.getElementById('message');
+        const attemptsEl = document.getElementById('attempts');
+        const historyEl = document.getElementById('history');
+        const resetBtn = document.getElementById('resetBtn');
+
+        const MAX_ATTEMPTS = 10;
+        let secret = randomBetween(1, 100);
+        let attemptsLeft = MAX_ATTEMPTS;
+        let lowBound = 1;
+        let highBound = 100;
+        const guesses = [];
+
+        form.addEventListener('submit', function (e) {
+          e.preventDefault();
+          const raw = input.value.trim();
+          if (!raw) return;
+          const guess = Number(raw);
+          if (!Number.isInteger(guess) || guess < 1 || guess > 100) {
+            setMessage('Please enter a whole number between 1 and 100.', '#b91c1c', '#fee2e2', '#fecaca');
+            return;
+          }
+
+          if (attemptsLeft <= 0) return;
+
+          guesses.push(guess);
+          historyEl.textContent = guesses.join(', ');
+
+          if (guess === secret) {
+            setMessage(`🎉 Correct! ${guess} is the number.`, '#166534', '#ecfdf5', '#bbf7d0');
+            setDisabled(true);
+            resetBtn.style.display = 'block';
+            return;
+          }
+
+          attemptsLeft -= 1;
+          attemptsEl.textContent = String(attemptsLeft);
+
+          // tighten bounds for better hint
+          if (guess < secret && guess >= lowBound) lowBound = guess + 1;
+          if (guess > secret && guess <= highBound) highBound = guess - 1;
+
+          if (attemptsLeft === 0) {
+            setMessage(`❌ Out of tries! The number was ${secret}.`, '#991b1b', '#fef2f2', '#fecaca');
+            setDisabled(true);
+            resetBtn.style.display = 'block';
+            return;
+          }
+
+          const diff = Math.abs(guess - secret);
+          let hint = guess < secret ? 'Too low' : 'Too high';
+          let heat = 'Cold';
+          if (diff <= 3) heat = '🔥 Scorching';
+          else if (diff <= 7) heat = '🌡️ Warm';
+          else if (diff <= 15) heat = '❄️ Cool';
+          else heat = '🥶 Cold';
+
+          setMessage(`${hint}. ${heat}. Try between ${lowBound} and ${highBound}.`, '#1f2937', '#f8fafc', '#e5e7eb');
+          input.select();
+        });
+
+        resetBtn.addEventListener('click', resetGame);
+
+        window.revealRange = function () {
+          setMessage(`🔎 The number is between ${lowBound} and ${highBound}.`, '#334155', '#f1f5f9', '#e2e8f0');
+        };
+
+        function resetGame() {
+          secret = randomBetween(1, 100);
+          attemptsLeft = MAX_ATTEMPTS;
+          lowBound = 1;
+          highBound = 100;
+          guesses.length = 0;
+          attemptsEl.textContent = String(attemptsLeft);
+          historyEl.textContent = '—';
+          setMessage('New game started! Make your guess.', '#0f172a', '#f8fafc', '#e5e7eb');
+          input.value = '';
+          setDisabled(false);
+          resetBtn.style.display = 'none';
+          input.focus();
+        }
+
+        function setDisabled(disabled) {
+          input.disabled = disabled;
+          form.querySelector('button[type="submit"]').disabled = disabled;
+          form.querySelector('button[type="submit"]').style.opacity = disabled ? '0.6' : '1';
+          form.querySelector('button[type="submit"]').style.cursor = disabled ? 'not-allowed' : 'pointer';
+        }
+
+        function setMessage(text, color, bg, border) {
+          message.textContent = text;
+          message.style.color = color;
+          message.style.background = bg;
+          message.style.border = `1px dashed ${border}`;
+        }
+
+        function randomBetween(min, max) {
+          return Math.floor(Math.random() * (max - min + 1)) + min;
+        }
+
+        // focus on load
+        input.focus();
+      })();
+    </script>
+  </body>
+  </html>
+
