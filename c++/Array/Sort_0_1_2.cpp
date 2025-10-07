@@ -7,26 +7,26 @@
 using namespace std;
 
 void sort012(vector<int>& arr){
-    int low=0, mid=0;
-    int high = arr.size()-1;
+    int n=arr.size();
+    //creating new array
+    vector<int> arrnew(n,1);
 
-    while (mid <= high) {
-        if (arr[mid] == 0)
-        {
-            swap(arr[low], arr[mid]);
-            low++;
-            mid++;
+    int start=0;
+    int end=n-1;
+
+    //iterating over it
+    for(int i=0; i<n; i++){
+        if(arr[i]==0){
+            arrnew[start]=0;
+            start++;
         }
-        else if (arr[mid] ==1)
-        {
-            mid++;
-        }
-        else
-        {
-            swap(arr[mid],arr[high]);
-            high--;
+        else if(arr[i]==2){
+            arrnew[end]=2;
+            end--;
         }
     }
+    //copying  from newarr to old arr
+    arr=arrnew;
 }
 
 int main() {

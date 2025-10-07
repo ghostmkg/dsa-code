@@ -10,6 +10,8 @@ Solutions in multiple programming languages (C, C++, Python, Java, JavaScript, e
 
 Beginner-friendly problem statements and structured solutions.
 
+Comprehensive DSA Roadmap to guide your learning journey. [View Roadmap](./roadmap/DSA%20Road%20Map%20Basic%20to%20Advance.md)
+
 Open-source project: everyone is welcome to contribute.
 
 Perfect for Hacktoberfest, coding practice, and interview preparation.
