@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DOM Traversal Methods Demo</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        
+        h1 {
+            text-align: center;
+            color: #667eea;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+        }
+        
+        .section {
+            margin: 25px 0;
+            padding: 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            background: #f9f9f9;
+        }
+        
+        .section h2 {
+            color: #764ba2;
+            margin-bottom: 15px;
+            font-size: 1.5em;
+        }
+        
+        .parent {
+            background: #ffeb3b;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 15px 0;
+        }
+        
+        .child {
+            background: #4caf50;
+            color: white;
+            padding: 15px;
+            margin: 10px;
+            border-radius: 5px;
+        }
+        
+        .sibling {
+            background: #2196f3;
+            color: white;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+        
+        button {
+            background: #667eea;
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 5px;
+            transition: all 0.3s ease;
+        }
+        
+        button:hover {
+            background: #764ba2;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        ul {
+            list-style-position: inside;
+            margin: 15px 0;
+        }
+        
+        li {
+            padding: 10px;
+            margin: 5px 0;
+            background: #e3f2fd;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+        
+        .highlight {
+            background: #ff9800 !important;
+            color: white;
+            font-weight: bold;
+            transform: scale(1.05);
+        }
+        
+        .demo-box {
+            background: #e8eaf6;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border-left: 4px solid #667eea;
+        }
+        
+        .output {
+            background: #1e1e1e;
+            color: #00ff00;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+            min-height: 50px;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+        }
+        
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        
+        th {
+            background: #667eea;
+            color: white;
+        }
+        
+        tr:nth-child(even) {
+            background: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 id="mainTitle">DOM Traversal Methods Demonstration</h1>
+        
+        <!-- Section 1: Parent Node Access -->
+        <div class="section" id="section1">
+            <h2>1. Parent Node Traversal</h2>
+            <div class="parent" id="parentBox">
+                <p>Parent Element</p>
+                <div class="child" id="childElement">
+                    <span id="targetSpan">Click the button to find my parent!</span>
+                </div>
+            </div>
+            <button onclick="findParent()">Find Parent Node</button>
+            <button onclick="findParentElement()">Find Parent Element</button>
+            <div class="output" id="output1">Result will appear here...</div>
+        </div>
+
+        <!-- Section 2: Child Nodes Access -->
+        <div class="section" id="section2">
+            <h2>2. Child Nodes Traversal</h2>
+            <div class="parent" id="parentWithChildren">
+                <div class="child">First Child</div>
+                <div class="child">Second Child</div>
+                <div class="child">Third Child</div>
+            </div>
+            <button onclick="getFirstChild()">Get First Child</button>
+            <button onclick="getLastChild()">Get Last Child</button>
+            <button onclick="getAllChildren()">Get All Children</button>
+            <div class="output" id="output2">Result will appear here...</div>
+        </div>
+
+        <!-- Section 3: Sibling Nodes Access -->
+        <div class="section" id="section3">
+            <h2>3. Sibling Nodes Traversal</h2>
+            <div>
+                <div class="sibling">First Sibling</div>
+                <div class="sibling" id="middleSibling">Middle Sibling (Target)</div>
+                <div class="sibling">Last Sibling</div>
+            </div>
+            <button onclick="getNextSibling()">Get Next Sibling</button>
+            <button onclick="getPreviousSibling()">Get Previous Sibling</button>
+            <div class="output" id="output3">Result will appear here...</div>
+        </div>
+
+        <!-- Section 4: querySelector and querySelectorAll -->
+        <div class="section" id="section4">
+            <h2>4. Query Selector Methods</h2>
+            <ul id="itemList">
+                <li class="item">Item 1</li>
+                <li class="item">Item 2</li>
+                <li class="item">Item 3</li>
+                <li class="item">Item 4</li>
+                <li class="item">Item 5</li>
+            </ul>
+            <button onclick="highlightFirst()">Highlight First Item</button>
+            <button onclick="highlightAll()">Highlight All Items</button>
+            <button onclick="resetList()">Reset List</button>
+            <div class="output" id="output4">Result will appear here...</div>
+        </div>
+
+        <!-- Section 5: Element Manipulation -->
+        <div class="section" id="section5">
+            <h2>5. Content & Style Manipulation</h2>
+            <div class="demo-box" id="demoBox">
+                <h3 id="demoTitle">Original Title</h3>
+                <p id="demoText">This is the original paragraph text.</p>
+            </div>
+            <button onclick="changeContent()">Change Content</button>
+            <button onclick="changeStyle()">Change Style</button>
+            <button onclick="addNewElement()">Add New Element</button>
+            <button onclick="removeElement()">Remove Last Element</button>
+            <div class="output" id="output5">Result will appear here...</div>
+        </div>
+
+        <!-- Section 6: Table Traversal -->
+        <div class="section" id="section6">
+            <h2>6. Table DOM Traversal</h2>
+            <table id="dataTable">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Score</th>
+                    </tr>
+                </thead>
+                <tbody id="tableBody">
+                    <tr>
+                        <td>1</td>
+                        <td>Alice</td>
+                        <td>95</td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>Bob</td>
+                        <td>87</td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td>Charlie</td>
+                        <td>92</td>
+                    </tr>
+                </tbody>
+            </table>
+            <button onclick="highlightFirstRow()">Highlight First Row</button>
+            <button onclick="highlightLastRow()">Highlight Last Row</button>
+            <button onclick="addTableRow()">Add New Row</button>
+            <div class="output" id="output6">Result will appear here...</div>
+        </div>
+
+        <!-- Section 7: Advanced Traversal -->
+        <div class="section" id="section7">
+            <h2>7. Recursive DOM Traversal</h2>
+            <div id="nestedStructure">
+                <div class="level1">
+                    Level 1
+                    <div class="level2">
+                        Level 2
+                        <div class="level3">
+                            Level 3
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <button onclick="traverseRecursively()">Traverse Recursively</button>
+            <button onclick="countAllElements()">Count All Elements</button>
+            <div class="output" id="output7">Result will appear here...</div>
+        </div>
+    </div>
+
+    <script>
+        // Section 1: Parent Node Traversal Functions
+        function findParent() {
+            const span = document.getElementById('targetSpan');
+            const parent = span.parentNode;
+            document.getElementById('output1').innerHTML = 
+                `Parent Node: ${parent.nodeName}<br>Parent ID: ${parent.id}<br>Parent Class: ${parent.className}`;
+            parent.style.border = '3px solid red';
+            setTimeout(() => parent.style.border = '', 2000);
+        }
+
+        function findParentElement() {
+            const span = document.getElementById('targetSpan');
+            const parentElement = span.parentElement;
+            const grandParent = parentElement.parentElement;
+            document.getElementById('output1').innerHTML = 
+                `Parent Element: ${parentElement.nodeName} (${parentElement.className})<br>
+                 Grand Parent: ${grandParent.nodeName} (${grandParent.id})`;
+            grandParent.style.transform = 'scale(1.02)';
+            setTimeout(() => grandParent.style.transform = '', 2000);
+        }
+
+        // Section 2: Child Nodes Traversal Functions
+        function getFirstChild() {
+            const parent = document.getElementById('parentWithChildren');
+            const firstChild = parent.firstElementChild;
+            firstChild.style.transform = 'scale(1.1)';
+            firstChild.style.boxShadow = '0 5px 15px rgba(0,0,0,0.3)';
+            document.getElementById('output2').innerHTML = 
+                `First Child: ${firstChild.textContent}<br>Tag Name: ${firstChild.tagName}`;
+            setTimeout(() => {
+                firstChild.style.transform = '';
+                firstChild.style.boxShadow = '';
+            }, 2000);
+        }
+
+        function getLastChild() {
+            const parent = document.getElementById('parentWithChildren');
+            const lastChild = parent.lastElementChild;
+            lastChild.style.transform = 'scale(1.1)';
+            lastChild.style.boxShadow = '0 5px 15px rgba(0,0,0,0.3)';
+            document.getElementById('output2').innerHTML = 
+                `Last Child: ${lastChild.textContent}<br>Tag Name: ${lastChild.tagName}`;
+            setTimeout(() => {
+                lastChild.style.transform = '';
+                lastChild.style.boxShadow = '';
+            }, 2000);
+        }
+
+        function getAllChildren() {
+            const parent = document.getElementById('parentWithChildren');
+            const children = parent.children;
+            let output = `Total Children: ${children.length}<br><br>`;
+            
+            for(let i = 0; i < children.length; i++) {
+                children[i].style.background = `hsl(${i * 60}, 70%, 50%)`;
+                output += `Child ${i + 1}: ${children[i].textContent}<br>`;
+            }
+            
+            document.getElementById('output2').innerHTML = output;
+            
+            setTimeout(() => {
+                for(let child of children) {
+                    child.style.background = '';
+                }
+            }, 3000);
+        }
+
+        // Section 3: Sibling Nodes Traversal Functions
+        function getNextSibling() {
+            const middle = document.getElementById('middleSibling');
+            const next = middle.nextElementSibling;
+            
+            if(next) {
+                next.style.background = '#ff5722';
+                next.style.transform = 'translateX(20px)';
+                document.getElementById('output3').innerHTML = 
+                    `Next Sibling: ${next.textContent}`;
+                setTimeout(() => {
+                    next.style.background = '';
+                    next.style.transform = '';
+                }, 2000);
+            }
+        }
+
+        function getPreviousSibling() {
+            const middle = document.getElementById('middleSibling');
+            const previous = middle.previousElementSibling;
+            
+            if(previous) {
+                previous.style.background = '#ff5722';
+                previous.style.transform = 'translateX(-20px)';
+                document.getElementById('output3').innerHTML = 
+                    `Previous Sibling: ${previous.textContent}`;
+                setTimeout(() => {
+                    previous.style.background = '';
+                    previous.style.transform = '';
+                }, 2000);
+            }
+        }
+
+        // Section 4: Query Selector Functions
+        function highlightFirst() {
+            const firstItem = document.querySelector('.item');
+            firstItem.classList.add('highlight');
+            document.getElementById('output4').innerHTML = 
+                `Highlighted: ${firstItem.textContent}`;
+        }
+
+        function highlightAll() {
+            const allItems = document.querySelectorAll('.item');
+            let count = 0;
+            
+            allItems.forEach((item, index) => {
+                setTimeout(() => {
+                    item.classList.add('highlight');
+                    count++;
+                    document.getElementById('output4').innerHTML = 
+                        `Highlighted ${count} of ${allItems.length} items`;
+                }, index * 200);
+            });
+        }
+
+        function resetList() {
+            const allItems = document.querySelectorAll('.item');
+            allItems.forEach(item => item.classList.remove('highlight'));
+            document.getElementById('output4').innerHTML = 'List reset!';
+        }
+
+        // Section 5: Content & Style Manipulation Functions
+        function changeContent() {
+            const title = document.getElementById('demoTitle');
+            const text = document.getElementById('demoText');
+            
+            title.textContent = 'Modified Title Using DOM!';
+            text.innerHTML = '<strong>This content was changed using innerHTML!</strong> <em>DOM is powerful!</em>';
+            
+            document.getElementById('output5').innerHTML = 
+                'Content successfully modified using textContent and innerHTML!';
+        }
+
+        function changeStyle() {
+            const box = document.getElementById('demoBox');
+            box.style.background = 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
+            box.style.color = 'white';
+            box.style.transform = 'rotate(2deg)';
+            box.style.transition = 'all 0.5s ease';
+            
+            document.getElementById('output5').innerHTML = 
+                'Styles changed: background, color, and transform applied!';
+        }
+
+        function addNewElement() {
+            const box = document.getElementById('demoBox');
+            const newPara = document.createElement('p');
+            newPara.textContent = 'This is a newly created element!';
+            newPara.style.background = '#4caf50';
+            newPara.style.color = 'white';
+            newPara.style.padding = '10px';
+            newPara.style.marginTop = '10px';
+            newPara.style.borderRadius = '5px';
+            newPara.className = 'dynamic-element';
+            
+            box.appendChild(newPara);
+            
+            document.getElementById('output5').innerHTML = 
+                `New element added! Total children: ${box.children.length}`;
+        }
+
+        function removeElement() {
+            const box = document.getElementById('demoBox');
+            const dynamicElements = box.querySelectorAll('.dynamic-element');
+            
+            if(dynamicElements.length > 0) {
+                const lastElement = dynamicElements[dynamicElements.length - 1];
+                box.removeChild(lastElement);
+                document.getElementById('output5').innerHTML = 
+                    `Element removed! Remaining children: ${box.children.length}`;
+            } else {
+                document.getElementById('output5').innerHTML = 
+                    'No dynamic elements to remove!';
+            }
+        }
+
+        // Section 6: Table Traversal Functions
+        function highlightFirstRow() {
+            const tbody = document.getElementById('tableBody');
+            const firstRow = tbody.firstElementChild;
+            const cells = firstRow.children;
+            
+            for(let cell of cells) {
+                cell.style.background = '#ff9800';
+                cell.style.color = 'white';
+                cell.style.fontWeight = 'bold';
+            }
+            
+            document.getElementById('output6').innerHTML = 
+                `First row highlighted using firstElementChild!`;
+        }
+
+        function highlightLastRow() {
+            const tbody = document.getElementById('tableBody');
+            const lastRow = tbody.lastElementChild;
+            const cells = lastRow.children;
+            
+            for(let cell of cells) {
+                cell.style.background = '#2196f3';
+                cell.style.color = 'white';
+                cell.style.fontWeight = 'bold';
+            }
+            
+            document.getElementById('output6').innerHTML = 
+                `Last row highlighted using lastElementChild!`;
+        }
+
+        function addTableRow() {
+            const tbody = document.getElementById('tableBody');
+            const rowCount = tbody.children.length + 1;
+            
+            const newRow = document.createElement('tr');
+            newRow.innerHTML = `
+                <td>${rowCount}</td>
+                <td>User ${rowCount}</td>
+                <td>${Math.floor(Math.random() * 100)}</td>
+            `;
+            
+            tbody.appendChild(newRow);
+            
+            newRow.style.background = '#4caf50';
+            setTimeout(() => newRow.style.background = '', 2000);
+            
+            document.getElementById('output6').innerHTML = 
+                `New row added! Total rows: ${tbody.children.length}`;
+        }
+
+        // Section 7: Advanced Traversal Functions
+        function traverseRecursively() {
+            const container = document.getElementById('nestedStructure');
+            let output = 'DOM Tree Structure:<br><br>';
+            let elementCount = 0;
+            
+            function traverse(node, level = 0) {
+                const indent = '&nbsp;&nbsp;&nbsp;&nbsp;'.repeat(level);
+                
+                if(node.nodeType === 1) {
+                    elementCount++;
+                    output += `${indent}└─ ${node.nodeName}`;
+                    
+                    if(node.className) {
+                        output += ` (class: ${node.className})`;
+                    }
+                    if(node.id) {
+                        output += ` [id: ${node.id}]`;
+                    }
+                    
+                    output += '<br>';
+                    
+                    const children = node.children;
+                    for(let child of children) {
+                        traverse(child, level + 1);
+                    }
+                }
+            }
+            
+            traverse(container);
+            output += `<br>Total Elements Found: ${elementCount}`;
+            document.getElementById('output7').innerHTML = output;
+        }
+
+        function countAllElements() {
+            const container = document.getElementById('nestedStructure');
+            let stats = {
+                totalElements: 0,
+                divs: 0,
+                maxDepth: 0
+            };
+            
+            function count(node, depth = 0) {
+                if(node.nodeType === 1) {
+                    stats.totalElements++;
+                    
+                    if(node.nodeName === 'DIV') {
+                        stats.divs++;
+                    }
+                    
+                    if(depth > stats.maxDepth) {
+                        stats.maxDepth = depth;
+                    }
+                    
+                    const children = node.children;
+                    for(let child of children) {
+                        count(child, depth + 1);
+                    }
+                }
+            }
+            
+            count(container);
+            
+            document.getElementById('output7').innerHTML = `
+                <strong>Element Statistics:</strong><br>
+                Total Elements: ${stats.totalElements}<br>
+                DIV Elements: ${stats.divs}<br>
+                Maximum Depth: ${stats.maxDepth} levels<br>
+                First Child: ${container.firstElementChild.className}<br>
+                Has Children: ${container.children.length > 0}
+            `;
+        }
+
+        // Page Load Animation
+        window.addEventListener('load', function() {
+            const title = document.getElementById('mainTitle');
+            title.style.opacity = '0';
+            title.style.transform = 'translateY(-50px)';
+            
+            setTimeout(() => {
+                title.style.transition = 'all 1s ease';
+                title.style.opacity = '1';
+                title.style.transform = 'translateY(0)';
+            }, 100);
+            
+            console.log('DOM Traversal Demo Loaded!');
+            console.log('Total Sections:', document.querySelectorAll('.section').length);
+            console.log('Total Buttons:', document.querySelectorAll('button').length);
+        });
+
+        // Console Logging for Educational Purpose
+        console.log('=== DOM Traversal Methods Reference ===');
+        console.log('Parent: parentNode, parentElement');
+        console.log('Children: children, childNodes, firstChild, lastChild, firstElementChild, lastElementChild');
+        console.log('Siblings: nextSibling, previousSibling, nextElementSibling, previousElementSibling');
+        console.log('Querying: querySelector, querySelectorAll, getElementById, getElementsByClassName');
+        console.log('Manipulation: innerHTML, textContent, style, classList, createElement, appendChild, removeChild');
+    </script>
+</body>
+</html>
