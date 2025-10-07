@@ -1,0 +1,22 @@
+def finding(memo,nums,i): # A helper function 
+    if i==0: # Base case for the recursion
+        return 1
+    ans = 1
+    if i in memo: 
+        return memo[i]
+    for j in range(i):
+        if nums[j]<nums[i]:
+            ans = max(ans,1+ finding(memo,nums,j))
+    memo[i] = ans # Storing the max len subsequence so far
+    return memo[i]
+
+
+def lengthOfLIS(nums):
+    ans = 0
+    memo = {} # Initializing the dp memory
+    for i in range(len(nums)): # Computing for every num in nums
+        ans = max(ans,finding(memo,nums,i)) #returning back to the helper function
+    return ans
+
+nums = [0, 8, 4, 12, 2, 10, 6, 14, 1, 9, 5, 13, 3, 11, 7, 15]
+print(lengthOfLIS(nums))
