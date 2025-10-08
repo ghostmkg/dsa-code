@@ -1,5 +1,5 @@
-let x = Number(prompt("Enter the value of x : "));
-let y = Number(prompt("Enter the value of y : "));
+let x = 90;
+let y = 1;
 
 let z = x + y;
 
