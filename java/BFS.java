@@ -1,6 +1,5 @@
 // BFS from given source s
 import java.util.*;
-import java.util.*;
 import java.util.Queue;
 import java.util.LinkedList;
 

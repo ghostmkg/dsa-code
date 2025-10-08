@@ -1,79 +1,131 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Valentine Project</title>
-<style>
-    body {
-        background-color: #ffe6e6;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
-        font-family: 'Arial', sans-serif;
-        flex-direction: column;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Valentine Project</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #ffe6e6, #ffcce6, #ffb3d9);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            font-family: 'Poppins', sans-serif;
+            flex-direction: column;
+            overflow: hidden;
+            position: relative;
+        }
 
-    .heart {
-        position: relative;
-        width: 100px;
-        height: 100px;
-        background-color: red;
-        transform: rotate(-45deg);
-        animation: beat 1s infinite;
-        cursor: pointer;
-    }
+        .floating-hearts {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: -1;
+        }
 
-    .heart::before,
-    .heart::after {
-        content: "";
-        position: absolute;
-        width: 100px;
-        height: 100px;
-        background-color: red;
-        border-radius: 50%;
-    }
+        .floating-hearts span {
+            position: absolute;
+            display: block;
+            color: rgba(214, 47, 131, 0.699);
+            font-size: 1.5rem;
+            animation: float 10s linear infinite;
+        }
 
-    .heart::before {
-        top: -50px;
-        left: 0;
-    }
+        @keyframes float {
+            0% {
+                transform: translateY(100vh) scale(0.5);
+                opacity: 1;
+            }
 
-    .heart::after {
-        left: 50px;
-        top: 0;
-    }
+            100% {
+                transform: translateY(-10vh) scale(1.2);
+                opacity: 0;
+            }
+        }
 
-    @keyframes beat {
-        0%, 100% { transform: scale(1) rotate(-45deg); }
-        50% { transform: scale(1.2) rotate(-45deg); }
-    }
+        .heart {
+            position: relative;
+            width: 100px;
+            height: 100px;
+            background-color: red;
+            transform: rotate(-45deg);
+            animation: beat 1s infinite;
+            cursor: pointer;
+        }
 
-    .message {
-        margin-top: 20px;
-        font-size: 24px;
-        color: #d6004c;
-        opacity: 0;
-        transition: opacity 0.5s;
-    }
+        .heart::before,
+        .heart::after {
+            content: "";
+            position: absolute;
+            width: 100px;
+            height: 100px;
+            background-color: red;
+            border-radius: 50%;
+        }
 
-    .message.show {
-        opacity: 1;
-    }
-</style>
+        .heart::before {
+            top: -50px;
+            left: 0;
+        }
+
+        .heart::after {
+            left: 50px;
+            top: 0;
+        }
+
+        @keyframes beat {
+
+            0%,
+            100% {
+                transform: scale(1) rotate(-45deg);
+            }
+
+            50% {
+                transform: scale(1.2) rotate(-45deg);
+            }
+        }
+
+        .message {
+            margin-top: 20px;
+            font-size: 24px;
+            color: #d6004c;
+            opacity: 0;
+            transition: opacity 0.5s;
+        }
+
+        .message.show {
+            opacity: 1;
+        }
+    </style>
 </head>
+
 <body>
+    <div class="floating-hearts">
+        <span style="left: 10%;">💖</span>
+        <span style="left: 25%; animation-delay: 2s;">💗</span>
+        <span style="left: 40%; animation-delay: 4s;">💞</span>
+        <span style="left: 55%; animation-delay: 1s;">💘</span>
+        <span style="left: 70%; animation-delay: 3s;">💝</span>
+        <span style="left: 85%; animation-delay: 25;">💓</span>
+    </div>
 
-<div class="heart" onclick="showMessage()"></div>
-<div class="message" id="message">Happy Valentine’s Day! ❤️</div>
+    <div class="heart" onclick="showMessage()"></div>
+    <div class="message" id="message">Happy Valentine’s Day! ❤️</div>
 
-<script>
-    function showMessage() {
-        const msg = document.getElementById('message');
-        msg.classList.toggle('show');
-    }
-</script>
+    <script>
+        function showMessage() {
+            const msg = document.getElementById('message');
+            msg.classList.toggle('show');
+        }
+    </script>
 
 </body>
+
 </html>
