@@ -9,6 +9,14 @@ class Node {
         data = value;
         left = right = null;
     }
+
+    Node(int i) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    Node(int i) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
 }
 
 class BinaryTreeViews {

@@ -18,7 +18,6 @@ public class characterReplacement {
         }
         return result;
     }
-
     public static void main(String[] args) {
         characterReplacement cr = new characterReplacement();
         String s = "AABABBA";

@@ -72,10 +72,10 @@ class Node {
 /**
  * Implements a Binary Tree and includes methods for traversal and different views.
  */
-public class BinaryTree {
+public class  BinaryTree {
     Node root;
 
-    public BinaryTree() {
+    public void BinaryTree(Node root) {
         root = null;
     }
 
@@ -248,7 +248,7 @@ public class BinaryTree {
         if (root == null) {
             return;
         }
-
+    }
         class QueueObj {
             Node node;
             int hd; // Horizontal Distance

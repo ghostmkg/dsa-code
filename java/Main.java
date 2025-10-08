@@ -9,6 +9,20 @@ public class Main {
         this.data = data;
         this.left = this.right = null;
     }
+    public void preOrder(Node node) {
+        if (node != null) {
+            System.out.print(node.data + " ");
+            preOrder(node.left);
+            preOrder(node.right);
+        }
+    }
+    public void inOrder(Node node) {
+        if (node != null) {
+            inOrder(node.left);
+            System.out.print(node.data + " ");
+            inOrder(node.right);
+        }
+    }
     public static void main(String[] args) {
         System.out.println("--- Binary Tree Demonstration ---");
         BinaryTree tree = new BinaryTree();

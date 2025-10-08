@@ -1,10 +1,8 @@
 package algorithms.utils;
-
 import static org.junit.jupiter.api.Assertions.*;
-import java.util.*;
-import org.junit.jupiter.api.Test;
 
-class ArrayUtilsTest {
+
+public class ArrayUtilsTest {
 
     int[] sample = {1, 3, 5, 7, 9};
 
