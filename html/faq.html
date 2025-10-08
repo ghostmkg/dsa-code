@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HTML Only Accordion FAQ</title>
+    
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #e6f7ff; /* Light Blue Background */
+            padding: 40px 20px;
+        }
+        .container {
+            width: 100%;
+            max-width: 700px;
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+        }
+        h1 {
+            color: #007bff; /* Blue heading */
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        /* Styling the Accordion elements */
+        details {
+            border: 1px solid #b3d9ff; /* Light blue border */
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            background-color: #f0f8ff; /* Off-white for question box */
+            transition: all 0.3s ease;
+        }
+        
+        /* Style when the accordion is OPEN */
+        details[open] {
+            background-color: #e6f7ff; /* Lighter blue when open */
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        }
+
+        summary {
+            font-weight: bold;
+            font-size: 1.1em;
+            cursor: pointer;
+            outline: none;
+            color: #0056b3; /* Darker blue text */
+        }
+        
+        /* The content underneath the summary */
+        .answer {
+            padding-top: 10px;
+            margin-top: 10px;
+            border-top: 1px dashed #cccccc;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Frequently Asked Questions (HTML Only)</h1>
+
+        <details>
+            <summary>What is HTML?</summary>
+            <p class="answer">HTML (HyperText Markup Language) is the standard markup language for documents designed to be displayed in a web browser. It describes the structure of a web page.</p>
+        </details>
+
+        <details>
+            <summary>What is Hacktoberfest?</summary>
+            <p class="answer">Hacktoberfest is a month-long celebration of open source software run by DigitalOcean. It encourages participation in the open-source community, particularly for beginners.</p>
+        </details>
+
+        <details>
+            <summary>Can I make a game using only HTML?</summary>
+            <p class="answer">You can create simple **interactive** experiences, like the one you're currently viewing, or simple text adventures using links. However, true game logic, scoring, and randomness require JavaScript.</p>
+        </details>
+
+        <details>
+            <summary>How does this menu open without JavaScript?</summary>
+            <p class="answer">This is possible thanks to the native HTML5 tags: <code>&lt;details&gt;</code> and <code>&lt;summary&gt;</code>. The browser automatically handles the show/hide toggling for you!</p>
+        </details>
+
+    </div>
+
+</body>
+</html>
