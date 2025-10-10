@@ -1,41 +1,33 @@
-
-from collections import deque
-
 class Node:
-    def __init__(self, val, left=None, right=None):
-        self.val = val
-        self.left = left
-        self.right = right
+    def __init__(self, key):
+        self.left = None
+        self.right = None
+        self.val = key
 
-def build_tree_level_order(values):
-    if not values:
-        return None
-    it = iter(values)
-    root_val = next(it)
-    if root_val is None:
-        return None
+def inorder(root):
+    if root:
+        inorder(root.left)
+        print(root.val, end=" ")
+        inorder(root.right)
 
-    root = Node(root_val)
-    q = deque([root])
+def preorder(root):
+    if root:
+        print(root.val, end=" ")
+        preorder(root.left)
+        preorder(root.right)
 
-    for v in it:
-        parent = q[0]
-        if parent.left is None:
-            if v is not None:
-                parent.left = Node(v)
-                q.append(parent.left)
-            else:
-                parent.left = None
-            continue
-        if parent.right is None:
-            if v is not None:
-                parent.right = Node(v)
-                q.append(parent.right)
-            else:
-                parent.right = None
-            q.popleft()
-    return root
+def postorder(root):
+    if root:
+        postorder(root.left)
+        postorder(root.right)
+        print(root.val, end=" ")
 
-if __name__ == "__main__":
-    vals = [1, 2, 3, 4, 5, None, 7]
-    root = build_tree_level_order(vals)
+root = Node(1)
+root.left = Node(2)
+root.right = Node(3)
+root.left.left = Node(4)
+root.left.right = Node(5)
+
+print("Inorder:", end=" "); inorder(root)
+print("\nPreorder:", end=" "); preorder(root)
+print("\nPostorder:", end=" "); postorder(root)

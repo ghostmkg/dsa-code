@@ -1,31 +1,26 @@
-# Binary Search in python
+def binarySearch(arr, targetVal):
+  left = 0
+  right = len(arr) - 1
 
+  while left <= right:
+    mid = (left + right) // 2
 
-def binarySearch(array, x, low, high):
+    if arr[mid] == targetVal:
+      return mid
 
-    # Repeat until the pointers low and high meet each other
-    while low <= high:
+    if arr[mid] < targetVal:
+      left = mid + 1
+    else:
+      right = mid - 1
 
-        mid = low + (high - low)//2
+  return -1
 
-        if array[mid] == x:
-            return mid
+mylist = [1, 3, 5, 7, 9, 11, 13, 15, 17, 19]
+x = 11
 
-        elif array[mid] < x:
-            low = mid + 1
-
-        else:
-            high = mid - 1
-
-    return -1
-
-
-array = [3, 4, 5, 6, 7, 8, 9]
-x = 4
-
-result = binarySearch(array, x, 0, len(array)-1)
+result = binarySearch(mylist, x)
 
 if result != -1:
-    print("Element is present at index " + str(result))
+  print("Found at index", result)
 else:
-    print("Not found")
+  print("Not found")
