@@ -2,6 +2,20 @@
   "version": "0.2.0",
   "configurations": [
     {
+      "type": "java",
+      "name": "JobScheduling1",
+      "request": "launch",
+      "mainClass": "JobScheduling1",
+      "projectName": "dsa-code_163e7579"
+    },
+    {
+      "type": "java",
+      "name": "JobScheduling",
+      "request": "launch",
+      "mainClass": "JobScheduling",
+      "projectName": "dsa-code_163e7579"
+    },
+    {
       "name": "Java",
       "type": "java",
       "request": "launch",
