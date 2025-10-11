@@ -24,50 +24,50 @@ Output
 For each test case, print one integer — the minimum number of candies that Monokarp needs to buy additionally so that he can give each of the three nephews the same number of candies.
 */
 
+// 🧠 Approach:
+//     - If n is already divisible by 3 → extra = 0
+//     - Otherwise → find remainder r = n % 3
+//       -> We need (3 - r) more candies to make it divisible by 3.
 
-                         //SOLUTION
-//#include<bits/stdc++.h>
-#include<iostream>
+//       For example:
+//         n = 8 → 8 % 3 = 2 → needs 1 more → 9 candies total.
+//         n = 10 → 10 % 3 = 1 → needs 2 more → 12 candies total.
+
+//     ---------------------------------------------------------
+//     ⏱️ Time Complexity: O(1) per test case
+//     🧮 Space Complexity: O(1)
+// */
+
+
+
+//SOLUTION
+#include <iostream>
 using namespace std;
-#include<algorithm>
-#define ll long long
-#include<vector>
-#include<cmath>
-#include<bitset>
-#define nline '\n'
-#include<climits>
-#include<unordered_map>
-#include<map>
 
-void mrsumit(){
-    
+void solve() {
     int n;
-    cin>>n;
-    if(n%3==0){
-        cout<<"0"<<endl;
-        return;
-    }
-    int extra=3-(n%3);
-    cout<<extra<<nline;
+    cin >> n;
 
+    // Find remainder when divided by 3
+    int remainder = n % 3;
 
+    // If already divisible, no extra candies needed
+    if (remainder == 0)
+        cout << 0 << '\n';
+    else
+        cout << 3 - remainder << '\n';
 }
 
-
-
-
-
-
-   
-int main(){
-
-    ios_base::sync_with_stdio(false);
-    cin.tie(NULL);
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
 
     int t;
     cin >> t;
-    while(t--){
-    mrsumit();
+
+    while (t--) {
+        solve();
     }
+
     return 0;
 }
