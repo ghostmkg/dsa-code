@@ -2,6 +2,20 @@
   "version": "0.2.0",
   "configurations": [
     {
+      "type": "java",
+      "name": "factorial_number",
+      "request": "launch",
+      "mainClass": "factorial_number",
+      "projectName": "dsa-code_7f39e1df"
+    },
+    {
+      "type": "java",
+      "name": "Factorial",
+      "request": "launch",
+      "mainClass": "Factorial",
+      "projectName": "dsa-code_7f39e1df"
+    },
+    {
       "name": "Java",
       "type": "java",
       "request": "launch",
