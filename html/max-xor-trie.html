@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Binary Trie — Max XOR Pair</title>
+<style>
+  body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial;max-width:720px;margin:28px auto;color:#0f172a}
+  input,button,textarea{font:inherit}
+  .row{display:flex;gap:.5rem;align-items:center}
+  textarea{width:100%;height:58px;padding:.5rem;border:1px solid #ccd; border-radius:6px}
+  button{padding:.45rem .7rem;border-radius:6px;border:0;background:#0ea5a4;color:white;cursor:pointer}
+  .muted{color:#6b7280;font-size:.9rem}
+  .result{margin-top:14px;padding:12px;border-radius:8px;background:#f8fafc;border:1px solid #e6eef0}
+  .trie{margin-top:10px;font-size:.85rem}
+  .node{display:inline-block;vertical-align:top;margin:6px;padding:6px;border-radius:6px;border:1px dashed #cbd5e1}
+  .branch{margin-left:14px;border-left:1px solid #e2e8f0;padding-left:10px}
+</style>
+</head>
+<body>
+  <h2>Binary Trie — Max XOR Pair (small DSA demo)</h2>
+  <p class="muted">Paste integers (comma or space separated), or generate a random set. Click <strong>Find max XOR</strong>.</p>
+
+  <div>
+    <textarea id="input" placeholder="e.g. 3, 10, 5, 25, 2, 8">3,10,5,25,2,8</textarea>
+  </div>
+
+  <div class="row" style="margin-top:.6rem">
+    <button id="rand">Random (8)</button>
+    <button id="run">Find max XOR</button>
+    <div style="margin-left:auto" class="muted">Bit-width: 
+      <select id="bits">
+        <option>31</option>
+        <option selected>30</option>
+        <option>16</option>
+        <option>8</option>
+    </select>
+    </div>
+  </div>
+
+  <div id="out" class="result" aria-live="polite"></div>
+  <div id="trie" class="trie"></div>
+
+<script>
+/*
+ Tiny Binary Trie for integers (0..2^B-1).
+ Purpose: compute maximum XOR pair (classic O(n * B) solution).
+ Implementation is compact and well-commented for quick PRs.
+*/
+
+function parseInput(text){
+  return text.trim().split(/[\s,]+/).map(s=>parseInt(s,10)).filter(n=>Number.isFinite(n));
+}
+
+/* Trie node */
+function newNode(){ return {child:[null,null], count:0}; }
+
+/* Insert number into trie */
+function insert(root, num, B){
+  let node = root;
+  node.count++;
+  for(let b = B-1; b>=0; b--){
+    const bit = (num>>b)&1;
+    if(!node.child[bit]) node.child[bit] = newNode();
+    node = node.child[bit];
+    node.count++;
+  }
+}
+
+/* Query best partner to maximize XOR for `num` (returns partner value) */
+function queryBest(root, num, B){
+  let node = root;
+  if(!node || node.count===0) return null;
+  let partner = 0;
+  for(let b = B-1; b>=0; b--){
+    const bit = (num>>b)&1;
+    const want = 1-bit; // to get 1 in XOR
+    if(node.child[want] && node.child[want].count>0){
+      partner |= (want<<b);
+      node = node.child[want];
+    } else {
+      partner |= ((1-want)<<b);
+      node = node.child[1-want];
+    }
+    if(!node) break;
+  }
+  return partner;
+}
+
+/* Find max XOR pair and return {maxXor, a, b} */
+function maxXorPair(arr, B=30){
+  if(arr.length<2) return null;
+  const root = newNode();
+  // insert first element, then for each next, query best and insert
+  insert(root, arr[0], B);
+  let best = -1, pair = [arr[0], arr[1]||arr[0]];
+  for(let i=1;i<arr.length;i++){
+    const x = arr[i];
+    const partner = queryBest(root, x, B);
+    if(partner!==null){
+      const val = x ^ partner;
+      if(val > best){ best = val; pair = [x, partner]; }
+    }
+    insert(root, x, B);
+  }
+  return {maxXor: best, a: pair[0], b: pair[1], root};
+}
+
+/* Minimal visualizer: show nodes with 0/1 branches (limited depth to keep tiny) */
+function renderTrie(root, maxDepth=6){
+  if(!root) return '';
+  function walk(node, depth){
+    if(!node || depth<0) return '';
+    const left = node.child[0], right = node.child[1];
+    const leftHtml = left ? `<div class="node">0<br><small>${left.count}</small>${walk(left,depth-1)}</div>` : '';
+    const rightHtml = right ? `<div class="node">1<br><small>${right.count}</small>${walk(right,depth-1)}</div>` : '';
+    if(!leftHtml && !rightHtml) return '';
+    return `<div class="branch">${leftHtml}${rightHtml}</div>`;
+  }
+  return `<div>root (count=${root.count})${walk(root, maxDepth)}</div>`;
+}
+
+/* UI wiring */
+const input = document.getElementById('input');
+const out = document.getElementById('out');
+const trieDiv = document.getElementById('trie');
+document.getElementById('run').addEventListener('click', ()=>{
+  const arr = parseInput(input.value);
+  if(arr.length<2){ out.innerHTML = '<strong>Enter at least two integers.</strong>'; trieDiv.innerHTML=''; return; }
+  const B = parseInt(document.getElementById('bits').value,10) || 30;
+  const res = maxXorPair(arr, B);
+  if(!res){ out.innerHTML = 'Not enough numbers.'; trieDiv.innerHTML=''; return; }
+  out.innerHTML = `<strong>Max XOR:</strong> ${res.maxXor} &nbsp; (pair: ${res.a} ⊕ ${res.b})`;
+  trieDiv.innerHTML = renderTrie(res.root, Math.min(8, B));
+});
+
+document.getElementById('rand').addEventListener('click', ()=>{
+  const n = 8;
+  const arr = Array.from({length:n}, ()=>Math.floor(Math.random()*256));
+  input.value = arr.join(', ');
+});
+
+/* small accessibility: run on Enter while textarea focused (Shift+Enter to newline) */
+input.addEventListener('keydown', (e)=>{
+  if(e.key==='Enter' && !e.shiftKey){ e.preventDefault(); document.getElementById('run').click(); }
+});
+</script>
+</body>
+</html>
+
