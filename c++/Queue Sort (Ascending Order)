@@ -1,0 +1,81 @@
+#include <iostream>
+#include <queue>
+#include <vector>
+#include <limits.h>
+using namespace std;
+
+// Function to find and remove the minimum element from the queue
+int extractMin(queue<int> &q) {
+    int size = q.size();
+    int minVal = INT_MAX;
+
+    // Find minimum value
+    for (int i = 0; i < size; i++) {
+        int curr = q.front();
+        q.pop();
+        if (curr < minVal) {
+            minVal = curr;
+        }
+        q.push(curr);
+    }
+
+    // Remove one occurrence of that minimum value
+    bool removed = false;
+    for (int i = 0; i < size; i++) {
+        int curr = q.front();
+        q.pop();
+        if (curr == minVal && !removed) {
+            removed = true;
+            continue; // skip pushing it back
+        }
+        q.push(curr);
+    }
+
+    return minVal;
+}
+
+// Queue sort function
+void queueSort(queue<int> &q) {
+    queue<int> sortedQ;
+
+    while (!q.empty()) {
+        int minVal = extractMin(q);
+        sortedQ.push(minVal);
+    }
+
+    q = sortedQ; // Replace original queue with sorted one
+}
+
+// Display queue contents
+void display(queue<int> q) {
+    while (!q.empty()) {
+        cout << q.front() << " ";
+        q.pop();
+    }
+    cout << endl;
+}
+
+// Main function
+int main() {
+    queue<int> q;
+    int n, val;
+
+    cout << "Enter number of elements: ";
+    cin >> n;
+
+    cout << "Enter elements:\n";
+    for (int i = 0; i < n; i++) {
+        cin >> val;
+        q.push(val);
+    }
+
+    cout << "\nOriginal Queue: ";
+    display(q);
+
+    queueSort(q);
+
+    cout << "Sorted Queue: ";
+    display(q);
+
+    return 0;
+}
