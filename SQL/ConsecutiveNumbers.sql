@@ -1,8 +1,8 @@
-select distinct p.num as ConsecutiveNums 
-from Logs p, Logs q, Logs r
-where
-p.id = q.id - 1 and
-q.id = r.id - 1 and
-p.num = q.num and
-q.num = r.num;
-
+SELECT DISTINCT Num AS ConsecutiveNums
+FROM (
+  SELECT Num,
+         LEAD(Num, 1) OVER (ORDER BY Id) AS next1,
+         LEAD(Num, 2) OVER (ORDER BY Id) AS next2
+  FROM Logs
+) t
+WHERE Num = next1 AND Num = next2;
