@@ -1,0 +1,62 @@
+# Dynamic program pattern problem:
+
+# Example for n = 3
+# Output:
+# *
+# **    *
+# ********
+# **    *
+# *
+# Example for n = 5
+# Output:
+# *
+# **
+# ***
+# ****      *
+# ************
+# ****      *
+# ***
+# **
+# *
+
+# Solution in Python
+def pattern(n):
+    # Check if the number is odd and greater than or equal to 3
+    if n % 2 == 0 or n < 3:
+        print("Please enter an odd number")
+    else:
+        # Calculate total columns in the widest part of the pattern
+        row_length = (n * 2) - 1
+        # Calculate total columns in the middle solid line
+        col_length = (n * 2) + 2
+
+        # -----------------------------
+        # Upper top part of the pattern
+        # -----------------------------
+        # Print increasing stars for top-left side (first (n-2) lines)
+        for row in range(n - 2):
+            print("*" * (row + 1))
+
+        # Print the line having gap in between and star at both sides
+        for row in range(1):
+            print("*" * (n - 1) + " " * (n + 1) + "*")
+
+        # Print the solid middle line (full stars)
+        for row in range(1):
+            print("*" * col_length)
+
+        # Print the line below the solid one (same as above gap line)
+        for row in range(1):
+            print("*" * (n - 1) + " " * (n + 1) + "*")
+
+        # -----------------------------
+        # Lower bottom part of the pattern
+        # -----------------------------
+        # Print decreasing stars for bottom-left side (mirror of top part)
+        for row in range(n - 2):
+            print("*" * (n - row - 2))
+
+
+# Take input from user
+number = int(input("Enter the odd number : "))
+pattern(number)

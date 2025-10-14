@@ -1,0 +1,29 @@
+def subset_sum(nums, target):
+    result = []
+    
+    def backtrack(start, path, current_sum):
+        # If current sum equals target, record this subset
+        if current_sum == target:
+            result.append(path[:])
+            return
+        
+        # If sum exceeds target, stop exploring further
+        if current_sum > target:
+            return
+        
+        # Try adding each remaining element
+        for i in range(start, len(nums)):
+            path.append(nums[i])
+            backtrack(i + 1, path, current_sum + nums[i])
+            path.pop()
+    
+    backtrack(0, [], 0)
+    return result
+
+
+# Example
+nums = [3, 4, 5, 2]
+target = 7
+solutions = subset_sum(nums, target)
+
+print("Subsets that sum to", target, "are:", solutions)

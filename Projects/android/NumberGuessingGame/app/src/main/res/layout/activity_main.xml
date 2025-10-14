@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:padding="20dp"
+    android:background="#FAFAFA">
+
+    <TextView
+        android:text="🎯 Number Guessing Game"
+        android:textSize="22sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="25dp"/>
+
+    <EditText
+        android:id="@+id/inputGuess"
+        android:hint="Enter your guess (1-100)"
+        android:inputType="number"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:background="@android:drawable/editbox_background"
+        android:layout_marginBottom="15dp"/>
+
+    <Button
+        android:id="@+id/guessBtn"
+        android:text="Guess"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <Button
+        android:id="@+id/resetBtn"
+        android:text="Reset Game"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"/>
+
+    <TextView
+        android:id="@+id/resultText"
+        android:text="Try to guess the number!"
+        android:textSize="18sp"
+        android:layout_marginTop="25dp"
+        android:textColor="#000"/>
+</LinearLayout>
