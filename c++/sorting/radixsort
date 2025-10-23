@@ -1,0 +1,57 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+// A utility function to get the maximum value in an array
+int getMax(const vector<int>& arr) {
+    return *max_element(arr.begin(), arr.end());
+}
+
+// A function to do counting sort of arr[] according to the digit represented by exp
+void countingSort(vector<int>& arr, int exp) {
+    int n = arr.size();
+    vector<int> output(n); // output array
+    int count[10] = {0};
+
+    // Count occurrences of digits
+    for (int i = 0; i < n; i++)
+        count[(arr[i] / exp) % 10]++;
+
+    // Convert count[i] so that count[i] now contains actual
+    // position of this digit in output[]
+    for (int i = 1; i < 10; i++)
+        count[i] += count[i - 1];
+
+    // Build the output array (stable sort — process from end)
+    for (int i = n - 1; i >= 0; i--) {
+        int digit = (arr[i] / exp) % 10;
+        output[count[digit] - 1] = arr[i];
+        count[digit]--;
+    }
+
+    // Copy output[] to arr[]
+    arr = output;
+}
+
+// Main Radix Sort function
+void radixSort(vector<int>& arr) {
+    int m = getMax(arr); // Find the maximum number to know the number of digits
+
+    // Do counting sort for every digit
+    for (int exp = 1; m / exp > 0; exp *= 10)
+        countingSort(arr, exp);
+}
+
+int main() {
+    vector<int> arr = {170, 45, 75, 90, 802, 24, 2, 66};
+
+    cout << "Original array:\n";
+    for (int x : arr) cout << x << " ";
+    cout << "\n\n";
+
+    radixSort(arr);
+
+    cout << "Sorted array:\n";
+    for (int x : arr) cout << x << " ";
+    cout << "\n";
+    return 0;
+}
