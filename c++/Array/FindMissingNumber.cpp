@@ -4,22 +4,17 @@ int main()
 {
     int n;
     cin >> n;
-    vector<int> a(n);
+    vector<int> nums(n);
     for(int i = 0; i < n; i++)
     {
-        cin >> a[i];
+        cin >> nums[i];
     }
-    int ans = -1;
-    sort(a.begin(), a.end());
-    for(int i = 0; i < n - 1; i++)
-    {
-        if(a[i] == a[i+1]) continue; // skip duplicates
-        if(a[i] + 1 != a[i+1])
-        {
-            ans = a[i] + 1;
-            break;
-        }
+    int tsum = (n*(n+1))/2;
+    int sum = 0;
+    for(int i=0; i<n; i++){
+        sum += nums[i];
     }
-    cout << ans << endl;
+    int num = tsum - sum;
+    cout<<"Missing number: "<<num;
     return 0;
 }
