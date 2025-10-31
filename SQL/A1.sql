@@ -43,3 +43,7 @@ WHERE City='Chicago';
 
 SELECT * FROM EmplOyee
 WHERE Gender='M';
+
+
+SELECT * FROM EmplOyee
+WHERE Gender='F';
